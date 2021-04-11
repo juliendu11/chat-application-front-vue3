@@ -1,0 +1,7 @@
+
+mutation register($registerMemberInput: RegisterMemberInput!) {
+  register(registerMemberInput: $registerMemberInput) {
+    message
+    result
+  }
+}

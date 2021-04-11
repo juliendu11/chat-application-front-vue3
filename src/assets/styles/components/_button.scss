@@ -1,0 +1,45 @@
+// -----------------------------------------------------------------------------
+// This file contains all styles related to the button component.
+// -----------------------------------------------------------------------------
+%btn {
+    font-weight: 600;
+    font-size: 18px;
+    transition: all .3s ease;
+
+    &__loading{
+        display: flex;
+        align-items: center;
+        justify-content: center
+    }
+}
+
+.btn {
+    @extend %btn;
+
+    &--primary {
+        @include theme-aware("background-color", "color-primary");
+        @include theme-aware("color", "color-white");
+    }
+   
+
+    &:hover {
+        @include theme-aware-with-darken("background-color", "color-primary", 3);
+    }
+}
+
+.btn-link {
+    @extend %btn;
+
+    &--primary {
+        @include theme-aware("color", "color-primary");
+    }
+
+    &:hover {
+       filter: brightness(1.2);
+    }
+}
+
+.btn-small {
+    font-size: 14px;
+    font-weight: 500;
+}

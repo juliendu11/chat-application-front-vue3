@@ -1,0 +1,26 @@
+// -----------------------------------------------------------------------------
+// This file contains CSS helper classes.
+// -----------------------------------------------------------------------------
+
+.text-muted {
+    @include theme-aware("color", "color-gray2");
+}
+
+.disabled {
+    pointer-events: none;
+    cursor: default;
+
+    @include theme-aware-with-darken("background-color", "color-gray",10, true);
+}
+
+.d-flex {
+    display: flex;
+}
+
+.align-center {
+    align-items: center;
+}
+
+.justify-content-between {
+    justify-content: space-between;
+}

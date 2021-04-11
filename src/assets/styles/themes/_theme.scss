@@ -1,0 +1,22 @@
+// -----------------------------------------------------------------------------
+// When having several themes, this file contains everything related to the
+// default one.
+// -----------------------------------------------------------------------------
+$themes: (
+    light: (
+        color-background: #fff,
+        color-white: #fff,
+        color-gray:#f5f8fa,
+        color-gray2:#b5b5c3,
+        color-primary: #3a7fee,
+        color-danger: #ee3a43
+    ),
+    dark: (
+        color-background: #37474F,
+        color-white: #fff,
+        color-gray:#f5f8fa,
+        color-gray2:#b5b5c3,
+        color-primary: #3a7fee,
+        color-danger: #ee3a43
+    )
+);

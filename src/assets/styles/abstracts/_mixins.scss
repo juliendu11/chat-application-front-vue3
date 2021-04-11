@@ -1,0 +1,19 @@
+// -----------------------------------------------------------------------------
+// This file contains all application-wide Sass mixins.
+// -----------------------------------------------------------------------------
+@mixin theme-aware($key, $color, $important: false) {
+    @each $theme-name, $theme-color in $themes {
+        .theme-#{$theme-name} & {
+            #{$key}: map-get(map-get($themes, $theme-name), $color) valueif($important,  !important, null);
+        }
+    }
+  }
+
+
+  @mixin theme-aware-with-darken($key, $color, $value, $important: false) {
+    @each $theme-name, $theme-color in $themes {
+        .theme-#{$theme-name} & {
+            #{$key}: darken(map-get(map-get($themes, $theme-name), $color), $value) valueif($important,  !important, null);
+        }
+    }
+  }
