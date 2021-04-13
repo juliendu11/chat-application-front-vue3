@@ -27,3 +27,6 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+https://dribbble.com/shots/13946594-Omni-channel-Conversation/attachments/5558081?mode=media

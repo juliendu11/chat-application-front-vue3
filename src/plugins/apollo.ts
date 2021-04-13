@@ -9,12 +9,14 @@ const client = new ApolloClient({
     uri: process.env.VUE_APP_API,
     headers: {
       authorization: `Bearer ${getToken()}`
-    }
+    },
+    credentials: 'include'
   }),
   cache: new InMemoryCache(),
   headers: {
     authorization: `Bearer ${getToken()}`
-  }
+  },
+  credentials: 'include'
 })
 
 export default (app:App):void => {

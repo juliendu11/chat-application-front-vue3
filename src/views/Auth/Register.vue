@@ -109,7 +109,7 @@ export default defineComponent({
           return
         }
 
-        showSuccessSwal('Congratulations your account has been created, you can now log in')
+        showSuccessSwal(data.register.message)
       } catch (error) {
         showErrorSwal(error.message)
       } finally {
