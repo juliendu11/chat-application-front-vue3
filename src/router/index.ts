@@ -9,7 +9,19 @@ const routes: Array<RouteRecordRaw> = [
     path: '/',
     name: 'Home',
     component: Home,
-    meta: { clientAuth: true }
+    meta: { clientAuth: true },
+    children: [
+      {
+        path: '/rooms/:name',
+        name: 'Room',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Room.vue')
+      },
+      {
+        path: '/messages/:username',
+        name: 'Message',
+        component: () => import(/* webpackChunkName: "about" */ '../views/PrivateMessage.vue')
+      }
+    ]
   },
   ...AuthRoutes
 ]

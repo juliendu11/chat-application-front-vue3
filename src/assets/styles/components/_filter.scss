@@ -1,0 +1,20 @@
+.filter {
+    @include theme-aware('color', 'color-gray2');
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    i {
+        font-size: 20px;
+    }
+
+    &:hover {
+        @include theme-aware('background-color', 'color-gray3');
+    }
+}

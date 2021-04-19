@@ -1,0 +1,17 @@
+.search-input {
+    position: relative;
+    @include theme-aware('color', 'color-gray2');
+
+    i {
+        position: absolute;
+        left: 1.2rem;
+        top: 0.8rem;
+        font-size: 18px
+    }
+
+    input {
+        @include theme-aware('background-color', 'color-gray3');
+        padding:0.8rem 2.8rem;
+        border-radius: 1rem;
+    }
+}

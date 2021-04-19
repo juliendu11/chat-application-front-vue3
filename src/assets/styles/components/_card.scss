@@ -1,0 +1,25 @@
+.card {
+    @include theme-aware("background-color", "color-background");
+    width: 100%;
+
+    padding: 1rem 1.5rem;
+
+    &__header {
+        text-align: center;
+        font-size: 1.5rem;
+        font-weight: 500;
+        margin: 0.5rem 0;
+    }
+
+    &__body {
+        margin: 2rem 0;
+    }
+
+    &__actions {
+        text-align: right;
+
+        :last-child {
+            margin-left: 1rem;
+        }
+    }
+}

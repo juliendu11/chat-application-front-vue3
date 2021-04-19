@@ -20,6 +20,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/reset-password',
     name: 'ResetPassword',
     component: () => import(/* webpackChunkName: "about" */ '../views/Auth/ResetPassword.vue')
+  },
+  {
+    path: '/confirm',
+    name: 'Confirm',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Auth/Confirm.vue')
   }
 ]
 

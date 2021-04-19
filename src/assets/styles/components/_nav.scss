@@ -1,0 +1,25 @@
+.nav{
+   ul {
+        display: flex;
+        align-items: center;
+   }
+
+   li {
+        padding: 20px 20px;
+        position: relative;
+
+        &:hover,
+        &:active,
+        &.active {
+            font-weight: 500;
+
+            &::after {
+                content: '.';
+                position: absolute;
+                bottom: 0;
+                left: 45%;
+                font-size: 35px;
+            }
+        }
+   }
+}

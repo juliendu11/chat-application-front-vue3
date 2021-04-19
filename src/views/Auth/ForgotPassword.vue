@@ -36,8 +36,12 @@ import { computed, defineComponent, reactive } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email as emailValidator } from '@vuelidate/validators'
 
-import { showErrorSwal } from '@/services/swal.service'
+import { showErrorSwal, showSuccessSwal } from '@/services/swal.service'
 import { useRouter } from 'vue-router'
+import { useMutation } from '@vue/apollo-composable'
+
+import { ForgotPasswordInput, ForgotPasswordOutput } from '@/types/graphql/member/ForgotPassword'
+import ForgotPassword from '@/graphql/member/mutations/ForgotPassword.gql'
 
 export default defineComponent({
   name: 'ForgotPassword',
@@ -56,12 +60,31 @@ export default defineComponent({
       state
     )
 
+    const { mutate } = useMutation<ForgotPasswordOutput>(ForgotPassword)
+
     const onSubmitForm = async () => {
       try {
         const isFormCorrect = await v$.value.$validate()
         if (!isFormCorrect) return
 
         state.loading = true
+
+        const { data } = await mutate({
+          forgotPasswordInput: {
+            email: state.email
+          }
+        } as ForgotPasswordInput)
+
+        if (!data) {
+          throw new Error('Unable to get data')
+        }
+
+        if (!data.forgotPassword.result) {
+          showErrorSwal(data.forgotPassword.message)
+          return
+        }
+
+        showSuccessSwal(data.forgotPassword.message)
       } catch (error) {
         showErrorSwal(error.message)
       } finally {

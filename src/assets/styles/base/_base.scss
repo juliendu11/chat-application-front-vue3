@@ -8,6 +8,8 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+
+  transition: all 0.3s ease-out;
 }
 
 body {
@@ -38,4 +40,8 @@ button {
 a {
   text-decoration: none;
   color: inherit;
+}
+
+li {
+  list-style: none;
 }

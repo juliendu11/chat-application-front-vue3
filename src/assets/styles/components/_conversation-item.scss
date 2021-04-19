@@ -1,0 +1,55 @@
+.conversation-item {
+    display: flex;
+    gap: 1rem;
+
+    padding: 1.2rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+
+    img {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        span{
+            @include theme-aware('background-color', 'color-primary');
+            @include theme-aware('color', 'color-white');
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    &__content {
+        flex: 2;
+        span {
+            font-weight: 600;
+        }
+
+        p {
+            margin-top: 0.5rem;
+            font-size: 14px;
+            @include theme-aware('color', 'color-gray4');
+        }
+    }
+
+    &__extra {
+        font-size: 12px;
+        @include theme-aware('color', 'color-gray4');
+    }
+
+    &:hover {
+        @include theme-aware('background-color', 'color-gray3');
+    }
+
+}

@@ -1,0 +1,17 @@
+.user-pic{
+    cursor: pointer;
+
+    img, span {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+    }
+
+    span {
+        @include theme-aware('background-color', 'color-primary');
+        @include theme-aware('color', 'color-white');
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}

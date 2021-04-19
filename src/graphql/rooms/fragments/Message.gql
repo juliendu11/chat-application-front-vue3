@@ -1,0 +1,8 @@
+fragment messageField on Message {
+  date
+  message
+  user {
+      _id
+      username
+  }
+}

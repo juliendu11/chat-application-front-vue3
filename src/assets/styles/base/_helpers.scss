@@ -24,3 +24,11 @@
 .justify-content-between {
     justify-content: space-between;
 }
+
+.text-danger {
+    @include theme-aware("color", "color-danger");
+}
+
+.text-success {
+    @include theme-aware("color", "color-success");
+}

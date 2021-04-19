@@ -1,0 +1,7 @@
+
+mutation confirmAccount($confirmAccountInput: ConfirmMemberInput!) {
+  confirmAccount(confirmAccountInput: $confirmAccountInput) {
+    message
+    result
+  }
+}

@@ -42,22 +42,38 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive } from 'vue'
+import { computed, defineComponent, onMounted, reactive } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 
-import { showErrorSwal } from '@/services/swal.service'
-import { useRouter } from 'vue-router'
+import { showErrorSwal, showSuccessSwal } from '@/services/swal.service'
+import { useRoute, useRouter } from 'vue-router'
+
+import ResetPassword from '@/graphql/member/mutations/ResetPassword.gql'
+import { ResetPasswordInput, ResetPasswordOutput } from '@/types/graphql/member/ResetPassword'
+import { useMutation } from '@vue/apollo-composable'
 
 export default defineComponent({
   name: 'ResetPassword',
   setup () {
     const router = useRouter()
+    const route = useRoute()
 
     const state = reactive({
       password: '',
       repassword: '',
+      email: '',
+      token: '',
       loading: false
+    })
+
+    onMounted(() => {
+      if (route.query.email && route.query.token) {
+        state.email = route.query.email as string
+        state.token = route.query.token as string
+      } else {
+        showErrorSwal('Missing parameters')
+      }
     })
 
     const v$ = useVuelidate(
@@ -68,12 +84,32 @@ export default defineComponent({
       state
     )
 
+    const { mutate } = useMutation<ResetPasswordOutput>(ResetPassword)
+
     const onSubmitForm = async () => {
       try {
         const isFormCorrect = await v$.value.$validate()
         if (!isFormCorrect) return
 
         state.loading = true
+
+        const { data } = await mutate({
+          resetPasswordInput: {
+            email: state.email,
+            newPassword: state.repassword,
+            token: state.token
+          }
+        } as ResetPasswordInput)
+
+        if (!data) {
+          throw new Error('Unable to get data')
+        }
+
+        if (!data.resetPassword.result) {
+          showErrorSwal(data.resetPassword.message)
+          return
+        }
+        showSuccessSwal(data.resetPassword.message)
       } catch (error) {
         showErrorSwal(error.message)
       } finally {

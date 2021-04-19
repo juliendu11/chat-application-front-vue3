@@ -1,0 +1,11 @@
+.spinner {
+    font-size: 50px;
+
+    &--primary {
+        @include theme-aware("color", "color-primary");
+    }
+
+    &--success {
+        @include theme-aware("color", "color-success");
+    }
+}
