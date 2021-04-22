@@ -1,14 +1,10 @@
-#import "../fragments/Message.gql"
+#import "../fragments/Room.gql"
 
 query {
   rooms {
      message
      value {
-        _id
-        name
-        last_message {
-            ...messageField
-        }
+       ...roomField
      }
      result
   }

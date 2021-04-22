@@ -1,0 +1,11 @@
+#import "../fragments/Room.gql"
+
+mutation createRoom($createRoomInput: CreateRoomInput!) {
+  createRoom(createRoomInput: $createRoomInput) {
+   message
+    result
+    value {
+        ...roomField
+    }
+  }
+}

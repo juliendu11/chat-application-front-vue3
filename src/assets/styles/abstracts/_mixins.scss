@@ -2,26 +2,137 @@
 // This file contains all application-wide Sass mixins.
 // -----------------------------------------------------------------------------
 @mixin theme-aware($key, $color, $important: false) {
-    @each $theme-name, $theme-color in $themes {
+
+    @each $theme-name,
+    $theme-color in $themes {
         .theme-#{$theme-name} & {
             #{$key}: map-get(map-get($themes, $theme-name), $color) valueif($important,  !important, null);
         }
     }
-  }
+}
 
 
-  @mixin theme-aware-with-darken($key, $color, $value, $important: false) {
-    @each $theme-name, $theme-color in $themes {
+@mixin theme-aware-with-darken($key, $color, $value, $important: false) {
+
+    @each $theme-name,
+    $theme-color in $themes {
         .theme-#{$theme-name} & {
             #{$key}: darken(map-get(map-get($themes, $theme-name), $color), $value) valueif($important,  !important, null);
         }
     }
-  }
+}
 
-  @mixin theme-aware-with-lighten($key, $color, $value, $important: false) {
-    @each $theme-name, $theme-color in $themes {
+@mixin theme-aware-with-lighten($key, $color, $value, $important: false) {
+
+    @each $theme-name,
+    $theme-color in $themes {
         .theme-#{$theme-name} & {
             #{$key}: lighten(map-get(map-get($themes, $theme-name), $color), $value) valueif($important,  !important, null);
         }
     }
-  }
+}
+
+@mixin switch-size($margin, $width, $height, $line-height, $space, $checked-tick-pos, $icon-font-size) {
+    input:empty~span {
+        //line-height: $line-height;
+        margin: $margin;
+        height: $height;
+        width: $width + $space;
+        border-radius: ($height/2);
+    }
+
+    input:empty~span:before,
+    input:empty~span:after {
+        width: $width;
+        border-radius: ($height/2);
+    }
+
+    input:empty~span:after {
+        height: $height - 2 * $space;
+        width: $height - 2 * $space;
+        //line-height: $line-height;
+        top: $space;
+        bottom: $space;
+        margin-left: $space;
+        font-size: $icon-font-size;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    input:checked~span:after {
+        margin-left: $checked-tick-pos;
+    }
+}
+
+//
+// Spacing
+//
+@mixin margin-helper($level, $spacing) {
+    .m-#{$level} {
+        margin: #{$spacing} !important;
+    }
+
+    .mx-#{$level} {
+        margin-left: #{$spacing} !important;
+        margin-right: #{$spacing} !important;
+    }
+
+    .my-#{$level} {
+        margin-top: #{$spacing} !important;
+        margin-bottom: #{$spacing} !important;
+    }
+
+    .mt-#{$level} {
+        margin-top: #{$spacing} !important;
+    }
+
+    .mb-#{$level} {
+        margin-bottom: #{$spacing} !important;
+    }
+
+    .ml-#{$level} {
+        margin-left: #{$spacing} !important;
+    }
+
+    .mr-#{$level} {
+        margin-right: #{$spacing} !important;
+    }
+}
+
+@mixin padding-helper($level, $spacing) {
+    .p-#{$level} {
+        padding: #{$spacing} !important;
+    }
+
+    .px-#{$level} {
+        padding-left: #{$spacing} !important;
+        padding-right: #{$spacing} !important;
+    }
+
+    .py-#{$level} {
+        padding-top: #{$spacing} !important;
+        padding-bottom: #{$spacing} !important;
+    }
+
+    .pt-#{$level} {
+        padding-top: #{$spacing} !important;
+    }
+
+    .pb-#{$level} {
+        padding-bottom: #{$spacing} !important;
+    }
+
+    .pl-#{$level} {
+        padding-left: #{$spacing} !important;
+    }
+
+    .pr-#{$level} {
+        padding-right: #{$spacing} !important;
+    }
+}
+
+@mixin letter-spacing($level, $spacing) {
+    .wide-#{$level} {
+        letter-spacing: #{$spacing} !important;
+    }
+}

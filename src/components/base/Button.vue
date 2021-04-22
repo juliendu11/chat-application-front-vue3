@@ -1,5 +1,5 @@
 <template>
-    <button type="submit" :class="getClass" @click="onClick">
+    <button type="submit" :class="getClass">
         <div v-if="loading" class="btn__loading">
         <div class="loader"></div>
                 <slot/>
@@ -35,7 +35,7 @@ export default defineComponent({
       default: false
     }
   },
-  setup (props, { emit }) {
+  setup (props) {
     const getClass = computed(() => {
       let _class = `btn btn--${props.color}`
       if (props.type === 'btn') {
@@ -48,19 +48,14 @@ export default defineComponent({
         _class += ' disabled'
       }
       if (props.rounded) {
-        _class += ' btn-rounded'
+        _class += ' btn-rounded '
       }
 
       return _class
     })
 
-    const onClick = () => {
-      emit('click')
-    }
-
     return {
-      getClass,
-      onClick
+      getClass
     }
   }
 })

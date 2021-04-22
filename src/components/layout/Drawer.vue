@@ -21,6 +21,7 @@
     </nav>
     <div class="drawer__content">
       <div v-show="selectedTab === 0" v-if="rooms && rooms.value">
+        <perfect-scrollbar>
         <div
           class="conversation-item"
           v-for="(room, i) in rooms.value"
@@ -31,19 +32,20 @@
             <span>{{ room.name }}</span>
           </div>
           <div class="conversation-item__content">
-            <span>{{ room.last_message.user.username }}</span>
+            <span>{{ room.last_message ? room.last_message.user.username : room.name }}</span>
             <p>
-              {{ room.last_message.message }}
+              {{  room.last_message ? room.last_message.message  :"Hello there!" }}
             </p>
           </div>
           <div class="conversation-item__extra">
-            <span> {{ formatDateFromNow(room.last_message.date) }}</span>
+            <span> {{ room.last_message ? formatDateFromNow(room.last_message.date) : "" }}</span>
           </div>
         </div>
+        </perfect-scrollbar>
         <div class="add-room">
           <Button :rounded="true" color="primary" @click="onClickAddRoom">
             <i class="fa fa-plus" aria-hidden="true"></i>
-            Add room
+            <span class="ml-1">Add room</span>
           </Button>
         </div>
       </div>

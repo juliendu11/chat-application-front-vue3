@@ -21,6 +21,7 @@
         input {
             padding: 1rem;
             border: solid 1px transparent;
+            border-radius: 1rem;
 
             @include theme-aware("background-color", "color-gray");
 

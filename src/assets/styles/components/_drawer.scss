@@ -14,6 +14,10 @@
         display: flex;
         flex-direction: column;
         padding: 1rem;
+
+        .ps {
+            height: 70vh;
+          }
     }
 
     &__menu {

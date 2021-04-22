@@ -1,10 +1,12 @@
 import { createApp } from 'vue'
 import dayjs from 'dayjs'
+import PerfectScrollbar from 'vue3-perfect-scrollbar'
 import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
 
 import './assets/styles/main.scss'
+import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css'
 
 import FormGroup from '@/components/base/FormGroup.vue'
 import Button from '@/components/base/Button.vue'
@@ -40,6 +42,7 @@ const app = createApp(App)
 ApolloPlugin(app)
 MittPlugin(app)
 
+app.use(PerfectScrollbar)
 app.use(router)
 app.component('FormGroup', FormGroup)
 app.component('Button', Button)

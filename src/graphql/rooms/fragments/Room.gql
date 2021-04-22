@@ -1,0 +1,9 @@
+#import "../fragments/Message.gql"
+
+fragment roomField on Room {
+    _id
+    last_message {
+        ...messageField
+    }
+    name
+}

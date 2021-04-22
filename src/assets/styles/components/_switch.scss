@@ -1,65 +1,203 @@
-/* The switch - the box around the slider */
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 28px;
 
-    input {
-        opacity: 0;
-        width: 0;
-        height: 0;
+//
+// Switch
+//
+
+
+// Base
+.switch {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+
+    label {
+        margin: 0;
     }
 
-    &__container{
+    input:empty {
+        margin-left: -999px;
+        height: 0;
+        width: 0;
+        overflow: hidden;
+        position: absolute;
+        opacity: 0;
+    }
+
+    input:empty~span {
+        display: inline-block;
+        position: relative;
+        float: left;
+        width: 1px;
+        text-indent: 0;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    input:empty~span:before,
+    input:empty~span:after {
+        position: absolute;
         display: flex;
         align-items: center;
-        gap: 10px;
-        margin: 0.8rem 0;
-    }
-
-    &__slider {
-        position: absolute;
-        cursor: pointer;
+        justify-content: center;
         top: 0;
-        left: 0;
-        right: 0;
         bottom: 0;
-        background-color: #ccc;
-        -webkit-transition: .4s;
-        transition: .4s;
+        left: 0;
+        content: ' ';
+        transition: all 100ms ease-in;
     }
 
-    &__slider:before {
-        position: absolute;
-        content: "";
-        height: 20px;
-        width: 20px;
-        left: 4px;
-        bottom: 4px;
-        background-color: white;
-        -webkit-transition: .4s;
-        transition: .4s;
+    input[disabled] {
+        cursor: not-allowed;
+
+        ~span:after,
+        ~span:before {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+    }
+}
+
+// Sizing
+.switch {
+
+    // Sizing
+    & {
+        $switch-margin: 2px 0;
+        $switch-width: 54px;
+        $switch-height: 30px;
+        $switch-line-height: 26px;
+        $switch-space: 3px;
+        $switch-checked-tick-pos: 26px;
+        $switch-icon-font-size: 0.65em;
+
+        //switch-size($margin, $width, $height, $line-height, $space, $checked-tick-pos, $icon-font-size)
+        @include switch-size($switch-margin,
+            $switch-width,
+            $switch-height,
+            $switch-line-height,
+            $switch-space,
+            $switch-checked-tick-pos,
+            $switch-icon-font-size);
     }
 
-    &__slider.round {
-        border-radius: 34px;
-    }
-    
-    &__slider.round:before {
-        border-radius: 50%;
+    // Small size
+    &.switch-sm {
+        $switch-margin: 2px 0;
+        $switch-width: 38px;
+        $switch-height: 24px;
+        $switch-line-height: 20px;
+        $switch-space: 2px;
+        $switch-checked-tick-pos: 16px;
+        $switch-icon-font-size: 0.55em;
+
+        @include switch-size($switch-margin,
+            $switch-width,
+            $switch-height,
+            $switch-line-height,
+            $switch-space,
+            $switch-checked-tick-pos,
+            $switch-icon-font-size);
     }
 
+    // Large size
+    &.switch-lg {
+        $switch-margin: 2px 0;
+        $switch-width: 72px;
+        $switch-height: 40px;
+        $switch-line-height: 34px;
+        $switch-space: 3px;
+        $switch-checked-tick-pos: 34px;
+        $switch-icon-font-size: 0.75em;
+
+        @include switch-size($switch-margin,
+            $switch-width,
+            $switch-height,
+            $switch-line-height,
+            $switch-space,
+            $switch-checked-tick-pos,
+            $switch-icon-font-size);
+    }
 }
 
 
-input:checked+.slider {
-    @include theme-aware('background-color', 'color-primary');
+// Theme colors
+
+// Normal
+@each $theme-name,
+$theme-color in $themes {
+    .theme-#{$theme-name} {
+
+        @each $color-name,
+        $color-value in $theme-color {
+            .switch-#{str-replace($color-name, 'color-', '')} {
+
+                // Base
+                input:empty~span:before {
+                    background-color:  $color-value;
+                }
+
+                // Tick
+                input:empty~span:after {
+                    background-color:#fff;
+                    opacity: 0.7;
+                }
+
+                input:checked {
+
+                    // Base
+                    ~span:before {
+                        background-color:  $color-value;
+                    }
+
+                    // Tick
+                    ~span:after {
+                        opacity: 1;
+                        color:  $color-value;
+                        background-color: #fff;
+                    }
+                }
+            }
+        }
+
+    }
 }
 
+// Outline
+@each $theme-name,
+$theme-color in $themes {
+    .theme-#{$theme-name} {
 
-input:checked+.slider:before {
-    -webkit-transform: translateX(20px);
-    -ms-transform: translateX(20px);
-    transform: translateX(20px);
+        @each $color-name,
+        $color-value in $theme-color {
+            .switch-outline-#{str-replace($color-name, 'color-', '')} {
+
+                // Base
+                input:empty~span:before {
+                    border: 2px solid #EBEDF3;
+                    background-color: transparent;
+                }
+
+                // Tick
+                input:empty~span:after {
+                    background-color: #EBEDF3;
+                }
+
+                input:checked {
+
+                    // Base
+                    ~span:before {
+                        border: 2px solid $color-value;
+                        background-color: transparent;
+                    }
+
+                    // Tick
+                    ~span:after {
+                        color: $color-value;
+                        background-color: $color-value;
+                    }
+                }
+            }
+        }
+
+    }
 }

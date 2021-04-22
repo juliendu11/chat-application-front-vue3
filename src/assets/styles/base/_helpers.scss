@@ -32,3 +32,29 @@
 .text-success {
     @include theme-aware("color", "color-success");
 }
+
+.inline-items {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+@include margin-helper(0, 0);
+@include margin-helper(1, .5rem);
+@include margin-helper(2, 1rem);
+@include margin-helper(3, 1.5rem);
+@include margin-helper(4, 2rem);
+
+
+@include padding-helper(0, 0);
+@include padding-helper(1, .5rem);
+@include padding-helper(2, 1rem);
+@include padding-helper(3, 1.5rem);
+@include padding-helper(4, 2rem);
+
+
+@include letter-spacing(1, .1rem);
+@include letter-spacing(2, .2rem);
+@include letter-spacing(3, .3rem);
+@include letter-spacing(4, .4rem);
+@include letter-spacing(5, .5rem);
