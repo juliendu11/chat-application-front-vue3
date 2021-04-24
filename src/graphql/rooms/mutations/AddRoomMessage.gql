@@ -1,0 +1,8 @@
+#import "../fragments/Room.gql"
+
+mutation addRoomMessage($addRoomMessageInput: AddRoomMessageInput!) {
+  addRoomMessage(addRoomMessageInput: $addRoomMessageInput) {
+   message
+    result
+  }
+}

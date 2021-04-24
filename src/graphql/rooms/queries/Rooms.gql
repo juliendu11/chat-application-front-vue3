@@ -2,10 +2,6 @@
 
 query {
   rooms {
-     message
-     value {
-       ...roomField
-     }
-     result
+     ...roomField
   }
 }

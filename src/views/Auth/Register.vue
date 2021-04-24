@@ -83,7 +83,7 @@ export default defineComponent({
       state
     )
 
-    const { mutate } = useMutation<RegisterMemberOutput>(Register)
+    const { mutate } = useMutation<RegisterMemberOutput, RegisterMemberInput>(Register)
 
     const onSubmitForm = async () => {
       try {
@@ -98,7 +98,7 @@ export default defineComponent({
             password: state.password,
             username: state.username
           }
-        } as RegisterMemberInput)
+        })
 
         if (!data) {
           throw new Error('Unable to get data')

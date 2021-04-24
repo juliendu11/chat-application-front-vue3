@@ -79,7 +79,7 @@ export default defineComponent({
       state
     )
 
-    const { mutate } = useMutation<LoginMemberOutput>(Login)
+    const { mutate } = useMutation<LoginMemberOutput, LoginMemberInput>(Login)
 
     const onSubmitForm = async () => {
       try {
@@ -93,7 +93,7 @@ export default defineComponent({
             id: state.id,
             password: state.password
           }
-        } as LoginMemberInput)
+        })
 
         if (!data) {
           throw new Error('Unable to get data')

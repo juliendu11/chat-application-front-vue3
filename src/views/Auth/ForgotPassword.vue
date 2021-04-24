@@ -60,7 +60,7 @@ export default defineComponent({
       state
     )
 
-    const { mutate } = useMutation<ForgotPasswordOutput>(ForgotPassword)
+    const { mutate } = useMutation<ForgotPasswordOutput, ForgotPasswordInput>(ForgotPassword)
 
     const onSubmitForm = async () => {
       try {
@@ -73,7 +73,7 @@ export default defineComponent({
           forgotPasswordInput: {
             email: state.email
           }
-        } as ForgotPasswordInput)
+        })
 
         if (!data) {
           throw new Error('Unable to get data')

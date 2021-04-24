@@ -20,11 +20,11 @@
       </ul>
     </nav>
     <div class="drawer__content">
-      <div v-show="selectedTab === 0" v-if="rooms && rooms.value">
+      <div v-show="selectedTab === 0">
         <perfect-scrollbar>
         <div
           class="conversation-item"
-          v-for="(room, i) in rooms.value"
+          v-for="(room, i) in rooms"
           :key="i"
           @click="onClickOpenRoomConversation(room.name)"
         >
@@ -82,11 +82,13 @@ import { useRouter } from 'vue-router'
 import { useQuery, useResult } from '@vue/apollo-composable'
 
 import PrivateMessageItem from '@/types/PrivateMessageItem'
-import { GetRoomsOuput } from '@/types/graphql/rooms/GetRooms'
 
 import Rooms from '@/graphql/rooms/queries/Rooms.gql'
+import RoomAddedSub from '@/graphql/rooms/subscriptions/RoomAdded.gql'
 import { useMitt } from '../../plugins/mitt'
 import DialogContainerNames from '../../enums/DialogContainerNames'
+import { Room } from '../../types/graphql/Items'
+import { cloneDeep } from '@apollo/client/utilities'
 
 export default defineComponent({
   name: 'Drawer',
@@ -100,8 +102,17 @@ export default defineComponent({
       selectedTab.value = tab
     }
 
-    const { result: getRoomsResult } = useQuery<GetRoomsOuput>(Rooms)
+    const { result: getRoomsResult, subscribeToMore } = useQuery<{rooms:Room[]}>(Rooms)
     const rooms = useResult(getRoomsResult)
+
+    subscribeToMore({
+      document: RoomAddedSub,
+      updateQuery: (previousResult, { subscriptionData }:any) => {
+        const _previousResult = cloneDeep(previousResult)
+        _previousResult.rooms.push(subscriptionData.data.roomAdded)
+        return _previousResult
+      }
+    })
 
     const privateMessages = ref<PrivateMessageItem[]>([
       {

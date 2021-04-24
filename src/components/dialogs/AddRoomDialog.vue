@@ -61,7 +61,7 @@ export default defineComponent({
       return errors
     })
 
-    const { mutate } = useMutation<CreateRoomOutput>(CreateRoom)
+    const { mutate } = useMutation<CreateRoomOutput, CreateRoomInput>(CreateRoom)
 
     const onClickAddNewRoom = async () => {
       try {
@@ -75,7 +75,7 @@ export default defineComponent({
             name: state.name,
             isPrivate: state.isPrivate
           }
-        } as CreateRoomInput,
+        },
         {
           update: (cache, result) => {
             if (result.data.createRoom.result) {

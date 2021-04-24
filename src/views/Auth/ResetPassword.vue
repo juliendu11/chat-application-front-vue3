@@ -84,7 +84,7 @@ export default defineComponent({
       state
     )
 
-    const { mutate } = useMutation<ResetPasswordOutput>(ResetPassword)
+    const { mutate } = useMutation<ResetPasswordOutput, ResetPasswordInput>(ResetPassword)
 
     const onSubmitForm = async () => {
       try {
@@ -99,7 +99,7 @@ export default defineComponent({
             newPassword: state.repassword,
             token: state.token
           }
-        } as ResetPasswordInput)
+        })
 
         if (!data) {
           throw new Error('Unable to get data')

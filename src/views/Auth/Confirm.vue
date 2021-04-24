@@ -33,7 +33,6 @@ export default defineComponent({
   name: 'Confirm',
   components: { Spinner },
   setup () {
-    const router = useRouter()
     const route = useRoute()
 
     const state = reactive({
@@ -67,7 +66,7 @@ export default defineComponent({
       state.message = message
     }
 
-    const { mutate } = useMutation<ConfirmAccountOutput>(ConfirmAccount)
+    const { mutate } = useMutation<ConfirmAccountOutput, ConfirmAccountInput>(ConfirmAccount)
 
     const onSubmitForm = async () => {
       try {
@@ -78,7 +77,7 @@ export default defineComponent({
             email: state.email,
             token: state.token
           }
-        } as ConfirmAccountInput)
+        })
 
         if (!data) {
           throw new Error('Unable to get data')
