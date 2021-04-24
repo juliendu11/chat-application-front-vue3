@@ -1,0 +1,8 @@
+query {
+    myInformation {
+        _id
+        email
+        username
+        profilPic
+    }
+}

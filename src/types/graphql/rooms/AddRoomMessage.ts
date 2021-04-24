@@ -8,9 +8,11 @@ type AddRoomMessageInput = {
 }
 
 type AddRoomMessageOuput = {
-  message: string
-  result: boolean
-  value: RoomMessageItem
+  addRoomMessage:{
+    message: string
+    result: boolean
+    value: RoomMessageItem
+  }
 }
 
 export {

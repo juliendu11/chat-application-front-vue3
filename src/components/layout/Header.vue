@@ -9,7 +9,7 @@
           <li><a href="#">Settings</a></li>
         </ul>
       </nav>
-      <UserPic username="Test"/>
+      <UserPic username="Test" @click="onClickOpenProfil"/>
     </header>
 </template>
 
@@ -18,12 +18,24 @@ import { defineComponent } from 'vue'
 
 import Logo from '@/components/Logo.vue'
 import UserPic from '@/components/UserPic.vue'
+import { useMitt } from '../../plugins/mitt'
 
 export default defineComponent({
   name: 'Header',
   components: {
     Logo,
     UserPic
+  },
+  setup () {
+    const mitt = useMitt()
+
+    const onClickOpenProfil = () => {
+      mitt.rightDrawer.emit()
+    }
+
+    return {
+      onClickOpenProfil
+    }
   }
 })
 </script>

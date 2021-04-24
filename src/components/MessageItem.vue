@@ -1,6 +1,6 @@
 <template>
   <div class="message-item" :class="{'message-item--right':isRight}">
-    <img :src="message.user.profilPic" :alt="message.user.username" />
+    <UserPic :username="message.user.username" :image="message.user.profilPic"/>
     <div class="message-item__content">
       <p>
         {{message.text}}
@@ -14,9 +14,11 @@
 import { defineComponent, PropType } from 'vue'
 import MessageItem from '../types/MessageItem'
 import { formatDateFromNow } from '@/common/date'
+import UserPic from '@/components/UserPic.vue'
 
 export default defineComponent({
   name: 'MessageItem',
+  components: { UserPic },
   props: {
     message: {
       type: Object as PropType<MessageItem>,

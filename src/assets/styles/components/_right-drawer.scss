@@ -1,0 +1,36 @@
+.right-drawer  {
+    width: $right-drawer-width;
+    height: 100%;
+    position: fixed;
+    right: -$right-drawer-width;
+
+    top: 0;
+    @include theme-aware('background-color', 'color-white');
+    z-index: 100;
+    padding: 2rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 1rem;
+
+    &--show {
+        right: 0;
+    }
+
+    .user-pic span {
+        height: 5rem;
+        width: 5rem;
+    }
+
+    .user-pic img {
+        height: 5rem;
+        width: 5rem;
+        border-radius: 50%;
+    }
+
+    button {
+        margin-top: 20px;
+    }
+}

@@ -14,6 +14,8 @@ import Switch from '@/components/base/Switch.vue'
 
 import ApolloPlugin from '@/plugins/apollo'
 import MittPlugin from '@/plugins/mitt'
+import StorePlugin from '@/plugins/store'
+
 import RelativeTime from 'dayjs/plugin/relativeTime'
 import UpdateLocale from 'dayjs/plugin/updateLocale'
 
@@ -41,6 +43,7 @@ const app = createApp(App)
 
 ApolloPlugin(app)
 MittPlugin(app)
+StorePlugin(app)
 
 app.use(PerfectScrollbar)
 app.use(router)

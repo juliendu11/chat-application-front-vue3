@@ -26,7 +26,7 @@
           class="conversation-item"
           v-for="(room, i) in rooms"
           :key="i"
-          @click="onClickOpenRoomConversation(room.name)"
+          @click="onClickOpenRoomConversation(room)"
         >
           <div class="conversation-item__header">
             <span>{{ room.name }}</span>
@@ -89,12 +89,14 @@ import { useMitt } from '../../plugins/mitt'
 import DialogContainerNames from '../../enums/DialogContainerNames'
 import { Room } from '../../types/graphql/Items'
 import { cloneDeep } from '@apollo/client/utilities'
+import { useStore } from '../../store/Store'
 
 export default defineComponent({
   name: 'Drawer',
   setup () {
     const router = useRouter()
     const mitt = useMitt()
+    const store = useStore()
 
     const selectedTab = ref(0)
 
@@ -123,8 +125,10 @@ export default defineComponent({
       }
     ])
 
-    const onClickOpenRoomConversation = (name: string) => {
-      router.push('/rooms/' + name)
+    const onClickOpenRoomConversation = (room: Room) => {
+      store.room.updateIdSelected(room._id)
+      store.room.updateNameSelected(room.name)
+      router.push('/rooms/' + room.name)
     }
 
     const onClickOpenPrivateConversation = (username: string) => {

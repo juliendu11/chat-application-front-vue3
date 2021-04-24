@@ -1,11 +1,11 @@
 <template>
-    <button type="submit" :class="getClass">
-        <div v-if="loading" class="btn__loading">
-        <div class="loader"></div>
-                <slot/>
-        </div>
-        <slot v-else/>
-    </button>
+  <button type="submit" :class="getClass">
+    <div v-if="loading" class="btn__loading">
+      <div class="loader"></div>
+      <slot />
+    </div>
+    <slot v-else />
+  </button>
 </template>
 
 <script lang="ts">
@@ -62,5 +62,4 @@ export default defineComponent({
 </script>
 
 <style>
-
 </style>

@@ -4,116 +4,102 @@
       <h3>{{ $route.params.name }}</h3>
     </div>
     <perfect-scrollbar>
-    <div class="tchat__content">
-      <div class="message-item">
-        <img src="https://randomuser.me/api/portraits/men/62.jpg" alt="" />
-        <div class="message-item__content">
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
-            posuere ex sit amet tortor viverra, non efficitur ex efficitur. Ut
-            placerat, massa bibendum molestie euismod, eros enim tempus mauris,
-            at laoreet velit orci vel metus. Suspendisse potenti. Vestibulum
-            blandit lacinia sem id hendrerit. Praesent ultrices est eget eros
-            laoreet, sed gravida lectus luctus. Phasellus non velit sit amet ex
-            luctus auctor. Nulla et nulla sapien. Nam luctus leo elit, a rhoncus
-            quam vehicula nec. Integer at nisl sit amet lectus tincidunt dictum.
-          </p>
-          <span>1h</span>
-        </div>
-      </div>
-      <div class="message-item message-item--right">
-        <img src="https://randomuser.me/api/portraits/men/62.jpg" alt="" />
-        <div class="message-item__content">
-          <p>Fusce</p>
-          <span>1m</span>
-        </div>
-      </div>
-       <div class="message-item message-item--right">
-        <img src="https://randomuser.me/api/portraits/men/62.jpg" alt="" />
-        <div class="message-item__content">
-          <p>Fusce</p>
-          <span>1m</span>
-        </div>
-      </div>
-       <div class="message-item message-item--right">
-        <img src="https://randomuser.me/api/portraits/men/62.jpg" alt="" />
-        <div class="message-item__content">
-          <p>Fusce</p>
-          <span>1m</span>
-        </div>
-      </div>
-       <div class="message-item message-item--right">
-        <img src="https://randomuser.me/api/portraits/men/62.jpg" alt="" />
-        <div class="message-item__content">
-          <p>Fusce</p>
-          <span>1m</span>
-        </div>
-      </div>
-       <div class="message-item message-item--right">
-        <img src="https://randomuser.me/api/portraits/men/62.jpg" alt="" />
-        <div class="message-item__content">
-          <p>Fusce</p>
-          <span>1m</span>
-        </div>
-      </div>
-       <div class="message-item message-item--right">
-        <img src="https://randomuser.me/api/portraits/men/62.jpg" alt="" />
-        <div class="message-item__content">
-          <p>Fusce</p>
-          <span>1m</span>
-        </div>
-      </div>
-       <div class="message-item message-item--right">
-        <img src="https://randomuser.me/api/portraits/men/62.jpg" alt="" />
-        <div class="message-item__content">
-          <p>Fusce</p>
-          <span>1m</span>
-        </div>
-      </div>
-       <div class="message-item message-item--right">
-        <img src="https://randomuser.me/api/portraits/men/62.jpg" alt="" />
-        <div class="message-item__content">
-          <p>Fusce</p>
-          <span>1m</span>
-        </div>
-      </div>
-       <div class="message-item message-item--right">
-        <img src="https://randomuser.me/api/portraits/men/62.jpg" alt="" />
-        <div class="message-item__content">
-          <p>Fusce</p>
-          <span>1m</span>
-        </div>
-      </div>
-       <div class="message-item message-item--right">
-        <img src="https://randomuser.me/api/portraits/men/62.jpg" alt="" />
-        <div class="message-item__content">
-          <p>Fusce</p>
-          <span>1m</span>
-        </div>
-      </div>
-    </div>
+      <div class="tchat__content"></div>
     </perfect-scrollbar>
-    <div class="tchat__footer"></div>
+    <div class="tchat__footer">
+      <form @submit.prevent="onSubmitForm">
+        <input id="tchatFileInput" type="file" hidden accept="video/*,image/*" @change="onAddFiles">
+        <textarea placeholder="Type your message here" v-model="form.message"/>
+        <div class="tchat__footer-btn">
+          <div>
+            <div class="tchat__icon" @click="onClickUploadFile">
+              <i class="fa fa-file-image-o" aria-hidden="true"></i>
+            </div>
+          </div>
+          <Button :loading="form.loading" :disabled="form.loading"> Send </Button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue'
+import { defineComponent, reactive } from 'vue'
+import { useMutation } from '@vue/apollo-composable'
+import { useVuelidate } from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
 
-import MessageItem from '@/types/MessageItem'
+import AddRoomMessage from '@/graphql/rooms/mutations/AddRoomMessage.gql'
+import { AddRoomMessageInput, AddRoomMessageOuput } from '@/types/graphql/rooms/AddRoomMessage'
+
+import { showErrorSwal } from '../services/swal.service'
+import { useStore } from '../store/Store'
+
 export default defineComponent({
   name: 'Room',
   setup () {
-    const messageToSend = ref('')
-    const messages = ref([])
+    const store = useStore()
 
-    const pagination = reactive({
-      skip: 0,
-      limit: 8,
-      moreAvailable: true,
-      pageCount: 5,
-      page: 1
+    const form = reactive({
+      message: '',
+      loading: false
     })
+
+    const v$ = useVuelidate(
+      {
+        message: { required }
+      },
+      form
+    )
+
+    const { mutate } = useMutation<AddRoomMessageOuput, AddRoomMessageInput>(AddRoomMessage)
+
+    const onSubmitForm = async () => {
+      try {
+        const isFormCorrect = await v$.value.$validate()
+        if (!isFormCorrect) return
+
+        form.loading = true
+
+        const { data } = await mutate({
+          addRoomMessageInput: {
+            id: store.room.getIdSelected(),
+            message: form.message
+          }
+        })
+
+        if (!data) {
+          throw new Error('Unable to get data')
+        }
+
+        if (!data.addRoomMessage.result) {
+          showErrorSwal(data.addRoomMessage.message)
+          return
+        }
+      } catch (error) {
+        showErrorSwal(error.message)
+      } finally {
+        form.loading = false
+      }
+    }
+
+    const onClickUploadFile = () => {
+      const fileInput = document.querySelector('#tchatFileInput')
+      if (fileInput) {
+        (fileInput as any).click()
+      }
+    }
+
+    const onAddFiles = () => {
+      console.log('onAddFiles')
+    }
+
+    return {
+      onSubmitForm,
+      form,
+      onAddFiles,
+      onClickUploadFile
+    }
   }
 })
 </script>

@@ -61,6 +61,12 @@
     }
 }
 
+.btn__loading{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
 .btn-small {
     font-size: 14px;
     font-weight: 500;
