@@ -2,6 +2,7 @@
     display: grid;
     grid-template-columns: minmax(150px, 20%) auto;
     grid-template-rows: auto 1fr;
+    position: relative;
 
     &__header {
         grid-column: 1/3;

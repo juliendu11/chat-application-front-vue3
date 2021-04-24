@@ -26,7 +26,6 @@ import { required } from '@vuelidate/validators'
 import { useMutation } from '@vue/apollo-composable'
 
 import CreateRoom from '@/graphql/rooms/mutations/CreateRoom.gql'
-import Rooms from '@/graphql/rooms/queries/Rooms.gql'
 
 import { CreateRoomInput, CreateRoomOutput } from '@/types/graphql/rooms/CreateRoom'
 import { showErrorSwal, showSuccessSwal } from '../../services/swal.service'
@@ -75,25 +74,7 @@ export default defineComponent({
             name: state.name,
             isPrivate: state.isPrivate
           }
-        },
-        {
-          update: (cache, result) => {
-            if (result.data.createRoom.result) {
-              const data: any = cache.readQuery({ query: Rooms })
-              cache.writeQuery({
-                query: Rooms,
-                data: {
-                  ...data,
-                  rooms: {
-                    ...data.rooms,
-                    value: [...data.rooms.value, result.data.createRoom.value]
-                  }
-                }
-              })
-            }
-          }
-        }
-        )
+        })
 
         if (!data) {
           throw new Error('Unable to get data')
