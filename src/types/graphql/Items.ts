@@ -1,23 +1,18 @@
+import MessageItem from '../MessageItem'
+
 /* eslint-disable camelcase */
 type Member = {
     _id:string
     email:string
 }
 
-type Message = {
-    date: Date
-    message: string
-    user: Member
-}
-
 type Room = {
     _id: string
-    last_message: Message
+    last_message: MessageItem
     name: string
 }
 
 export {
-  Message,
   Room,
   Member
 }

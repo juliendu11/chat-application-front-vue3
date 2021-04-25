@@ -2,6 +2,9 @@
 
 subscription roomMessageAdded {
     roomMessageAdded {
-        ...messageField
+        id
+        message {
+            ...messageField
+        }
     }
 }

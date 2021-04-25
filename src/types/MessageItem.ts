@@ -2,8 +2,9 @@ type MessageItem = {
     date: Date
     user:{
         _id:string
-        username:string,
-        isYou:boolean
+      username:string
+      profilPic:string
+      email:string
     }
     text: string
 }

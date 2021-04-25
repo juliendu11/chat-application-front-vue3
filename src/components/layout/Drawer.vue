@@ -79,16 +79,19 @@
 import { defineComponent, ref } from 'vue'
 import { formatDateFromNow } from '@/common/date'
 import { useRouter } from 'vue-router'
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useQuery, useResult, useSubscription, useApolloClient } from '@vue/apollo-composable'
+import { cloneDeep } from '@apollo/client/utilities'
 
 import PrivateMessageItem from '@/types/PrivateMessageItem'
+import { Room } from '@/types/graphql/Items'
+import { RoomMessageAddedOuput } from '@/types/graphql/rooms/RoomMessageAdded'
 
 import Rooms from '@/graphql/rooms/queries/Rooms.gql'
 import RoomAddedSub from '@/graphql/rooms/subscriptions/RoomAdded.gql'
+import RoomMessageAddedSub from '@/graphql/rooms/subscriptions/RoomMessageAdded.gql'
+
 import { useMitt } from '../../plugins/mitt'
 import DialogContainerNames from '../../enums/DialogContainerNames'
-import { Room } from '../../types/graphql/Items'
-import { cloneDeep } from '@apollo/client/utilities'
 import { useStore } from '../../store/Store'
 
 export default defineComponent({
@@ -97,6 +100,9 @@ export default defineComponent({
     const router = useRouter()
     const mitt = useMitt()
     const store = useStore()
+
+    const { resolveClient } = useApolloClient()
+    const client = resolveClient()
 
     const selectedTab = ref(0)
 
@@ -113,6 +119,28 @@ export default defineComponent({
         const _previousResult = cloneDeep(previousResult)
         _previousResult.rooms.push(subscriptionData.data.roomAdded)
         return _previousResult
+      }
+    })
+
+    const { onResult } = useSubscription<RoomMessageAddedOuput>(RoomMessageAddedSub)
+
+    onResult((result) => {
+      if (result.data && result.data.roomMessageAdded) {
+        const data = client.readQuery<{rooms:Room[]}>({ query: Rooms })
+        if (!data) return
+
+        const roomsCopy = cloneDeep(data.rooms)
+        const correspondingRoom = roomsCopy.find(x => x._id === (result.data as any).roomMessageAdded.id)
+        if (correspondingRoom) {
+          correspondingRoom.last_message = result.data.roomMessageAdded.message
+        }
+
+        client.writeQuery({
+          query: Rooms,
+          data: {
+            rooms: roomsCopy
+          }
+        })
       }
     })
 
