@@ -76,7 +76,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { formatDateFromNow } from '@/common/date'
 import { useRouter } from 'vue-router'
 import { useQuery, useResult, useSubscription, useApolloClient } from '@vue/apollo-composable'
@@ -122,17 +122,23 @@ export default defineComponent({
       }
     })
 
-    const { onResult } = useSubscription<RoomMessageAddedOuput>(RoomMessageAddedSub)
+    const { result } = useSubscription<RoomMessageAddedOuput>(RoomMessageAddedSub)
 
-    onResult((result) => {
-      if (result.data && result.data.roomMessageAdded) {
+    watch(result, (val) => {
+      console.log('aaa')
+      if (val.roomMessageAdded) {
         const data = client.readQuery<{rooms:Room[]}>({ query: Rooms })
         if (!data) return
 
         const roomsCopy = cloneDeep(data.rooms)
-        const correspondingRoom = roomsCopy.find(x => x._id === (result.data as any).roomMessageAdded.id)
+        const correspondingRoom = roomsCopy.find(x => x._id === val.roomMessageAdded.id)
+
         if (correspondingRoom) {
-          correspondingRoom.last_message = result.data.roomMessageAdded.message
+          correspondingRoom.last_message = val.roomMessageAdded.message
+        }
+
+        if (store.room.getIdSelected()) {
+          // Update room query
         }
 
         client.writeQuery({

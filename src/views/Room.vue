@@ -4,7 +4,9 @@
       <h3>{{ $route.params.name }}</h3>
     </div>
     <perfect-scrollbar>
-      <div class="tchat__content"></div>
+      <div class="tchat__content">
+        <MessageItem v-for="(message, z) in message.values" :key="z" :message="message" :isRight="isMe(message.user._id)"/>
+      </div>
     </perfect-scrollbar>
     <div class="tchat__footer">
       <form @submit.prevent="onSubmitForm">
@@ -24,25 +26,43 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue'
-import { useMutation } from '@vue/apollo-composable'
+import { defineComponent, reactive, ref } from 'vue'
+import { useMutation, useQuery } from '@vue/apollo-composable'
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
+import { onBeforeRouteUpdate } from 'vue-router'
 
 import AddRoomMessage from '@/graphql/rooms/mutations/AddRoomMessage.gql'
+import RoomMessages from '@/graphql/rooms/queries/RoomMessages.gql'
 import { AddRoomMessageInput, AddRoomMessageOuput } from '@/types/graphql/rooms/AddRoomMessage'
+import { RoomMessageInput, RoomMessageOuput } from '@/types/graphql/rooms/RoomMessage'
+import { MessageReactive } from '@/types/reactive/Room'
 
 import { showErrorSwal } from '../services/swal.service'
 import { useStore } from '../store/Store'
 
+import MessageItem from '@/components/MessageItem.vue'
+
 export default defineComponent({
   name: 'Room',
+  components: { MessageItem },
   setup () {
     const store = useStore()
+
+    const myId = store.member.getId()
+    const roomIdSelected = ref('')
 
     const form = reactive({
       message: '',
       loading: false
+    })
+
+    const message = reactive<MessageReactive>({
+      skip: 0,
+      limit: 10,
+      values: [],
+      moreAvailable: true,
+      pageAvailable: 1
     })
 
     const v$ = useVuelidate(
@@ -51,6 +71,36 @@ export default defineComponent({
       },
       form
     )
+
+    const loadRoomInformation = () => {
+      roomIdSelected.value = store.room.getIdSelected()
+    }
+
+    loadRoomInformation()
+
+    onBeforeRouteUpdate(() => {
+      loadRoomInformation()
+    })
+
+    const { onResult } = useQuery<RoomMessageOuput, RoomMessageInput>(RoomMessages, () => ({
+      getRoomMessageInput: {
+        id: roomIdSelected.value,
+        skip: message.skip,
+        limit: message.limit
+      }
+    }))
+
+    onResult(({ data }) => {
+      if (data.roomMessage.result) {
+        message.pageAvailable = data.roomMessage.value.pageAvailable
+        message.moreAvailable = data.roomMessage.value.moreAvailable
+        message.values = data.roomMessage.value.messages
+      }
+    })
+
+    const isMe = (id:string):boolean => {
+      return myId === id
+    }
 
     const { mutate } = useMutation<AddRoomMessageOuput, AddRoomMessageInput>(AddRoomMessage)
 
@@ -98,7 +148,9 @@ export default defineComponent({
       onSubmitForm,
       form,
       onAddFiles,
-      onClickUploadFile
+      onClickUploadFile,
+      message,
+      isMe
     }
   }
 })

@@ -3,7 +3,7 @@
     <UserPic :username="message.user.username" :image="message.user.profilPic"/>
     <div class="message-item__content">
       <p>
-        {{message.text}}
+        {{message.message}}
       </p>
       <span>{{formatDateFromNow(message.date)}}</span>
     </div>

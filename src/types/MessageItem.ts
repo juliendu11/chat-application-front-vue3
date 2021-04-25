@@ -6,7 +6,7 @@ type MessageItem = {
       profilPic:string
       email:string
     }
-    text: string
+    message: string
 }
 
 export default MessageItem
