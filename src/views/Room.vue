@@ -93,10 +93,31 @@ export default defineComponent({
       roomIdSelected.value = store.room.getIdSelected()
     }
 
+    const getFetchInformation = ():RoomMessageInput => {
+      return {
+        getRoomMessageInput: {
+          id: roomIdSelected.value,
+          skip: message.skip,
+          limit: message.limit
+        }
+      }
+    }
+
+    const whenChangingRoom = () => {
+      message.skip = 0
+      message.limit = 10
+      message.moreAvailable = false
+      message.pageAvailable = 1
+      message.page = 1
+      message.values = []
+    }
+
     loadRoomInformation()
 
     onBeforeRouteUpdate(() => {
       loadRoomInformation()
+      whenChangingRoom()
+      refetch(getFetchInformation())
     })
 
     onMounted(() => {
@@ -106,16 +127,11 @@ export default defineComponent({
       })
     })
 
-    const { onResult, refetch } = useQuery<RoomMessageOuput, RoomMessageInput>(RoomMessages, {
-      getRoomMessageInput: {
-        id: roomIdSelected.value,
-        skip: message.skip,
-        limit: message.limit
-      }
-    })
+    const { onResult, refetch } = useQuery<RoomMessageOuput, RoomMessageInput>(RoomMessages, getFetchInformation())
 
     onResult(({ data }) => {
       if (data.roomMessage.result) {
+        console.log('result')
         message.pageAvailable = data.roomMessage.value.pageAvailable
         message.moreAvailable = data.roomMessage.value.moreAvailable
         message.values = [...message.values, ...data.roomMessage.value.messages]
