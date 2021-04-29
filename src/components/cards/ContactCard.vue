@@ -13,7 +13,7 @@
         <div class="contact-card__actions">
              <Button
              type="btn-outline"
-          color="gray"
+          color="dark"
         >
           Send message
         </Button>

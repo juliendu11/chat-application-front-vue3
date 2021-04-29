@@ -6,7 +6,7 @@
     font-size: 18px;
     transition: all .3s ease;
 
-    &__loading{
+    &__loading {
         display: flex;
         align-items: center;
         justify-content: center
@@ -16,85 +16,146 @@
 
 }
 
-.btn-rounded {
-    border-radius: 10px
-}
+
 
 .btn {
     @extend %btn;
+}
 
-    &--primary {
-        @include theme-aware("background-color", "color-primary");
-        @include theme-aware("color", "color-white");
-    }
-   
 
-    &:hover {
-        @include theme-aware-with-darken("background-color", "color-primary", 3);
+@each $theme-name,
+$theme-color in $themes {
+    .theme-#{$theme-name} {
+
+        @each $color-name,
+        $color-value in $theme-color {
+            .btn--#{str-replace($color-name, 'color-', '')} {
+                background-color: $color-value;
+                color: white;
+
+                &:hover {
+                    background-color: darken($color-value, 3)
+                }
+            }
+        }
     }
 }
 
 .btn-clean {
     @extend %btn;
+}
 
-    &--primary {
-        @include theme-aware-with-lighten("background-color", "color-primary",35%);
-        @include theme-aware("color", "color-primary");
-    }
-   
+@each $theme-name,
+$theme-color in $themes {
+    .theme-#{$theme-name} {
 
-    &:hover {
-        @include theme-aware("background-color", "color-primary");
-        @include theme-aware("color", "color-white");
+        @each $color-name,
+        $color-value in $theme-color {
+            .btn-clean--#{str-replace($color-name, 'color-', '')} {
+                background-color: lighten($color-value, 35%);
+                color: $color-value;
+
+                &:hover {
+                    background-color: $color-value;
+                    color: white;
+                }
+            }
+        }
     }
 }
 
+
 .btn-link {
     @extend %btn;
+}
 
-    &--primary {
-        @include theme-aware("color", "color-primary");
-    }
+@each $theme-name,
+$theme-color in $themes {
+    .theme-#{$theme-name} {
 
-    &:hover {
-       filter: brightness(1.2);
+        @each $color-name,
+        $color-value in $theme-color {
+            .btn-link--#{str-replace($color-name, 'color-', '')} {
+                color: $color-value;
+
+                &:hover {
+                    filter: brightness(1.2);
+                }
+            }
+        }
     }
 }
 
 .btn-outline {
     @extend %btn;
-    
+
     border: solid 1px transparent;
     background-color: transparent;
+}
 
-    &--primary {
-        @include theme-aware("border-color", "color-primary");
-        @include theme-aware("color", "color-primary");
 
-        &:hover {
-            @include theme-aware("background-color", "color-primary");
-            @include theme-aware("color", "color-white");
-        }
-    }
+@each $theme-name,
+$theme-color in $themes {
+    .theme-#{$theme-name} {
 
-    &--gray {
-        @include theme-aware("border-color", "color-gray5");
-        @include theme-aware("color", "color-gray5");
+        @each $color-name,
+        $color-value in $theme-color {
+            .btn-outline--#{str-replace($color-name, 'color-', '')} {
+                color: $color-value;
+                border-color:$color-value;
 
-        &:hover {
-            @include theme-aware("background-color", "color-gray5");
-            @include theme-aware("color", "color-white");
+                &:hover {
+                    background-color: $color-value;
+                    color:white;
+                }
+            }
         }
     }
 }
 
-.btn__loading{
+
+.btn-text {
+    @extend %btn;
+    background-color: transparent;
+}
+
+@each $theme-name,
+$theme-color in $themes {
+    .theme-#{$theme-name} {
+
+        @each $color-name,
+        $color-value in $theme-color {
+            .btn-text--#{str-replace($color-name, 'color-', '')} {
+                color: $color-value;
+
+                &:hover {
+                    background-color: #e4e6ef;
+                }
+            }
+        }
+    }
+}
+
+.btn--icon {
+    padding: 1rem;
+    height: 20px;
+    width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn--loading {
     display: flex;
     align-items: center;
     gap: 1rem;
 }
 
-.btn-small {
+.btn--small {
     font-size: 14px;
     font-weight: 500;
+}
+
+.btn--rounded {
+    border-radius: 10px
 }

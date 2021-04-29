@@ -1,10 +1,18 @@
 <template>
   <div v-if="show" class="dialog-wrapper__mask" />
   <div class="right-drawer" :class="{'right-drawer--show':show}">
+    <div class="right-drawer__header">
+      <Button type="btn-text" :isIcon="true"  color="dark" @click="onClickClose">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </Button>
+    </div>
     <UserPic :username="username" :image="profilPic"/>
-    <h3>Username</h3>
+    <h3>{{username}}</h3>
     <input id="fileInput" type="file" hidden accept="image/*" @change="onAddFiles">
     <Button color="primary" @click="onClickChangeImage"> Change image </Button>
+    <div class="right-drawer__bottom">
+    <Button type="btn-clean" color="primary" @click="onClickLogout"> Logout </Button>
+    </div>
   </div>
 </template>
 
@@ -18,12 +26,16 @@ import MemberUpdateProfilPic from '@/graphql/member/mutations/MemberUpdateProfil
 import { MemberUpdateProfilPicInput, MemberUpdateProfilPicOutput } from '@/types/graphql/member/MemberUpdateProfilPic'
 import { useMutation } from '@vue/apollo-composable'
 import { showErrorSwal, showSuccessSwal } from '../../services/swal.service'
+import { deleteToken } from '../../services/token.service'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'RightDrawer',
   components: { UserPic },
   setup () {
     const mitt = useMitt()
+    const router = useRouter()
+
     const show = ref(false)
 
     const loading = ref(false)
@@ -73,11 +85,22 @@ export default defineComponent({
       await updateProfilPic(file as File)
     }
 
+    const onClickLogout = () => {
+      deleteToken()
+      router.push('/')
+    }
+
+    const onClickClose = () => {
+      show.value = false
+    }
+
     return {
       show,
       onClickChangeImage,
       onAddFiles,
-      ...getProfilInformation()
+      ...getProfilInformation(),
+      onClickLogout,
+      onClickClose
     }
   }
 })

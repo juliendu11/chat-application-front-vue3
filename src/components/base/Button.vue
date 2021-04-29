@@ -33,6 +33,10 @@ export default defineComponent({
     rounded: {
       type: Boolean,
       default: false
+    },
+    isIcon: {
+      type: Boolean,
+      default: false
     }
   },
   setup (props) {
@@ -47,11 +51,17 @@ export default defineComponent({
       if (props.type === 'btn-outline') {
         _class = `btn-outline btn-outline--${props.color}`
       }
+      if (props.type === 'btn-text') {
+        _class = `btn-text btn-text--${props.color}`
+      }
+      if (props.isIcon) {
+        _class += ' btn--icon'
+      }
       if (props.disabled) {
         _class += ' disabled'
       }
       if (props.rounded) {
-        _class += ' btn-rounded '
+        _class += ' btn--rounded '
       }
 
       return _class

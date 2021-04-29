@@ -7,7 +7,7 @@
     top: 0;
     @include theme-aware('background-color', 'color-white');
     z-index: 100;
-    padding: 2rem;
+    padding: 1rem 2rem;
 
     display: flex;
     flex-direction: column;
@@ -32,5 +32,22 @@
 
     button {
         margin-top: 20px;
+    }
+
+    &__header {
+        
+        margin-left: auto;
+
+        button {
+            margin: 0;
+        }
+    }
+
+    &__bottom {
+        width: 100%;
+        margin-top: auto;
+        button {
+            width: 100%;
+        }
     }
 }
