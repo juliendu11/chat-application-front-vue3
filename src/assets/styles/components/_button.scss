@@ -61,6 +61,33 @@
     }
 }
 
+.btn-outline {
+    @extend %btn;
+    
+    border: solid 1px transparent;
+    background-color: transparent;
+
+    &--primary {
+        @include theme-aware("border-color", "color-primary");
+        @include theme-aware("color", "color-primary");
+
+        &:hover {
+            @include theme-aware("background-color", "color-primary");
+            @include theme-aware("color", "color-white");
+        }
+    }
+
+    &--gray {
+        @include theme-aware("border-color", "color-gray5");
+        @include theme-aware("color", "color-gray5");
+
+        &:hover {
+            @include theme-aware("background-color", "color-gray5");
+            @include theme-aware("color", "color-white");
+        }
+    }
+}
+
 .btn__loading{
     display: flex;
     align-items: center;

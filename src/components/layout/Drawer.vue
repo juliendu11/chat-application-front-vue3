@@ -113,20 +113,19 @@ export default defineComponent({
     const { result: getRoomsResult, subscribeToMore } = useQuery<{rooms:Room[]}>(Rooms)
     const rooms = useResult(getRoomsResult)
 
-    // subscribeToMore({
-    //   document: RoomAddedSub,
-    //   updateQuery: (previousResult, { subscriptionData }:any) => {
-    //     console.log(subscriptionData)
-    //     const _previousResult = cloneDeep(previousResult)
-    //     _previousResult.rooms.push(subscriptionData.data.roomAdded)
-    //     return _previousResult
-    //   }
-    // })
+    subscribeToMore({
+      document: RoomAddedSub,
+      updateQuery: (previousResult, { subscriptionData }:any) => {
+        console.log(subscriptionData)
+        const _previousResult = cloneDeep(previousResult)
+        _previousResult.rooms.push(subscriptionData.data.roomAdded)
+        return _previousResult
+      }
+    })
 
     const { result } = useSubscription<RoomMessageAddedOuput>(RoomMessageAddedSub)
 
     watch(result, (val) => {
-      console.log('aaa')
       if (val.roomMessageAdded) {
         const data = client.readQuery<{rooms:Room[]}>({ query: Rooms })
         if (!data) return

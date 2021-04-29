@@ -1,0 +1,12 @@
+query {
+  membersInfo {
+    message
+    result
+    members {
+      email
+      username
+      profilPic
+      isOnline
+    }
+  }
+}

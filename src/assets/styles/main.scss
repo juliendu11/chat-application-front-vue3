@@ -45,11 +45,13 @@
   'components/message-item',
   'components/right-drawer',
   'components/conversation-item',
+  'components/contact-card',
   'components/logo';
 
 // 6. Page-specific styles
 @import
   'pages/auth-page',
+  'pages/contact-page',
   'pages/home';
 
 

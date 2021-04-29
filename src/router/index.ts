@@ -12,6 +12,11 @@ const routes: Array<RouteRecordRaw> = [
     meta: { clientAuth: true },
     children: [
       {
+        path: '/contacts',
+        name: 'Contacts',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Contact.vue')
+      },
+      {
         path: '/rooms/:name',
         name: 'Room',
         component: () => import(/* webpackChunkName: "about" */ '../views/Room.vue')

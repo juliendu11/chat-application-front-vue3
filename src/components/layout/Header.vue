@@ -3,10 +3,10 @@
       <Logo/>
       <nav class="nav">
         <ul>
-          <li class="active"><a href="#">Conversation</a></li>
-          <li><a href="#">Contacts</a></li>
-          <li><a href="#">Tasks</a></li>
-          <li><a href="#">Settings</a></li>
+          <li :class="{'active':activePage === 'conversation'}"><a href="#" @click.prevent="onClickChangePage('conversation')">Conversation</a></li>
+          <li :class="{'active':activePage === 'contacts'}"><a href="#" @click.prevent="onClickChangePage('contacts')">Contacts</a></li>
+          <li :class="{'active':activePage === 'tasks'}"><a href="#" @click.prevent="onClickChangePage('tasks')">Tasks</a></li>
+          <li :class="{'active':activePage === 'settings'}"><a href="#" @click.prevent="onClickChangePage('settings')">Settings</a></li>
         </ul>
       </nav>
       <UserPic username="Test" @click="onClickOpenProfil"/>
@@ -14,11 +14,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 import Logo from '@/components/Logo.vue'
 import UserPic from '@/components/UserPic.vue'
 import { useMitt } from '../../plugins/mitt'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'Header',
@@ -28,13 +29,27 @@ export default defineComponent({
   },
   setup () {
     const mitt = useMitt()
+    const router = useRouter()
+
+    const activePage = ref('conversation')
 
     const onClickOpenProfil = () => {
       mitt.rightDrawer.emit()
     }
 
+    const onClickChangePage = (toPage:string) => {
+      activePage.value = toPage
+      if (toPage === 'conversation') {
+        router.push('/')
+        return
+      }
+      router.push('/' + toPage)
+    }
+
     return {
-      onClickOpenProfil
+      onClickOpenProfil,
+      activePage,
+      onClickChangePage
     }
   }
 })

@@ -4,6 +4,9 @@ import MessageItem from '../MessageItem'
 type Member = {
     _id:string
     email:string
+    username:string
+    profilPic:string
+    isOnline:boolean
 }
 
 type Room = {

@@ -1,0 +1,60 @@
+.contact-card {
+    @include theme-aware('background-color', 'color-white');
+    text-align: center;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+
+    padding: 1.5rem 2rem;
+
+    &__indicator{
+        @include theme-aware('color', 'color-danger');
+
+        &--online {
+        @include theme-aware('color', 'color-success');
+        }
+    }
+
+
+    &__header {
+        text-align: left;
+    }
+
+    &__body {
+        img {
+            height: 6rem;
+            width: 6rem;
+            border-radius: 50%;
+            margin-bottom:1rem
+        }
+
+        h4 {
+            margin-bottom: .2rem;
+        }
+
+        span {
+            font-size: 12px;
+            @include theme-aware('color', 'color-gray4');
+            font-weight: 500;
+        }
+
+        .user-pic {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom:1rem;
+        }
+    }
+
+    
+
+    .user-pic span {
+        @include theme-aware('color', 'color-white');
+    }
+
+    &__actions {
+        margin-top: 3rem;
+
+        button {
+            font-size: 14px;
+        }
+    }
+}

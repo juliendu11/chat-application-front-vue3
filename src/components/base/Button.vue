@@ -44,6 +44,9 @@ export default defineComponent({
       if (props.type === 'btn-clean') {
         _class = `btn-clean btn-clean--${props.color}`
       }
+      if (props.type === 'btn-outline') {
+        _class = `btn-outline btn-outline--${props.color}`
+      }
       if (props.disabled) {
         _class += ' disabled'
       }

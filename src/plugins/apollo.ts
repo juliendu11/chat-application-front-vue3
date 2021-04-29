@@ -9,8 +9,16 @@ import { getMainDefinition } from '@apollo/client/utilities'
 const wsLink = new WebSocketLink({
   uri: 'ws://localhost:3000/graphql',
   options: {
-    reconnect: true
+    reconnect: true,
+    connectionParams: () => {
+      return {
+        headers: {
+          authorization: `Bearer ${getToken()}`
+        }
+      }
+    }
   }
+
 })
 
 const httpLink = createUploadLink({
