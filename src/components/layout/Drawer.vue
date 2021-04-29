@@ -113,14 +113,15 @@ export default defineComponent({
     const { result: getRoomsResult, subscribeToMore } = useQuery<{rooms:Room[]}>(Rooms)
     const rooms = useResult(getRoomsResult)
 
-    subscribeToMore({
-      document: RoomAddedSub,
-      updateQuery: (previousResult, { subscriptionData }:any) => {
-        const _previousResult = cloneDeep(previousResult)
-        _previousResult.rooms.push(subscriptionData.data.roomAdded)
-        return _previousResult
-      }
-    })
+    // subscribeToMore({
+    //   document: RoomAddedSub,
+    //   updateQuery: (previousResult, { subscriptionData }:any) => {
+    //     console.log(subscriptionData)
+    //     const _previousResult = cloneDeep(previousResult)
+    //     _previousResult.rooms.push(subscriptionData.data.roomAdded)
+    //     return _previousResult
+    //   }
+    // })
 
     const { result } = useSubscription<RoomMessageAddedOuput>(RoomMessageAddedSub)
 
@@ -139,6 +140,7 @@ export default defineComponent({
 
         if (store.room.getIdSelected()) {
           // Update room query
+          mitt.roomMessageAdded.emit(val.roomMessageAdded.message)
         }
 
         client.writeQuery({

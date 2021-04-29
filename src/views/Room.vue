@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, nextTick, reactive, ref } from 'vue'
+import { computed, defineComponent, nextTick, onMounted, reactive, ref } from 'vue'
 import { useMutation, useQuery } from '@vue/apollo-composable'
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
@@ -43,12 +43,14 @@ import { showErrorSwal } from '../services/swal.service'
 import { useStore } from '../store/Store'
 
 import MessageItem from '@/components/MessageItem.vue'
+import { useMitt } from '../plugins/mitt'
 
 export default defineComponent({
   name: 'Room',
   components: { MessageItem },
   setup () {
     const store = useStore()
+    const mitt = useMitt()
 
     const myId = store.member.getId()
     const roomIdSelected = ref('')
@@ -95,6 +97,12 @@ export default defineComponent({
 
     onBeforeRouteUpdate(() => {
       loadRoomInformation()
+    })
+
+    onMounted(() => {
+      mitt.roomMessageAdded.listen((messageAdded) => {
+        message.values.unshift(messageAdded)
+      })
     })
 
     const { onResult, refetch } = useQuery<RoomMessageOuput, RoomMessageInput>(RoomMessages, {
