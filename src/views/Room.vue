@@ -3,9 +3,9 @@
     <div class="tchat__header">
       <h3>{{ $route.params.name }}</h3>
     </div>
-    <perfect-scrollbar>
+    <perfect-scrollbar  id="scrollBar"  @ps-y-reach-start="onScrollUp">
       <div class="tchat__content">
-        <MessageItem v-for="(message, z) in message.values" :key="z" :message="message" :isRight="isMe(message.user._id)"/>
+        <MessageItem v-for="(message, z) in messagesReversed" :key="z" :message="message" :isRight="isMe(message.user._id)"/>
       </div>
     </perfect-scrollbar>
     <div class="tchat__footer">
@@ -26,11 +26,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue'
+import { computed, defineComponent, nextTick, reactive, ref } from 'vue'
 import { useMutation, useQuery } from '@vue/apollo-composable'
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import { onBeforeRouteUpdate } from 'vue-router'
+import { debounce } from 'ts-debounce'
 
 import AddRoomMessage from '@/graphql/rooms/mutations/AddRoomMessage.gql'
 import RoomMessages from '@/graphql/rooms/queries/RoomMessages.gql'
@@ -61,8 +62,22 @@ export default defineComponent({
       skip: 0,
       limit: 10,
       values: [],
-      moreAvailable: true,
-      pageAvailable: 1
+      moreAvailable: false,
+      pageAvailable: 1,
+      page: 1
+    })
+
+    const autoScrollToBottom = () => {
+      nextTick(() => {
+        const scrollBar = document.querySelector('#scrollBar')
+        if (scrollBar) {
+          scrollBar.scrollTop = scrollBar.scrollHeight
+        }
+      })
+    }
+
+    const messagesReversed = computed(() => {
+      return message.values.slice().reverse()
     })
 
     const v$ = useVuelidate(
@@ -82,19 +97,20 @@ export default defineComponent({
       loadRoomInformation()
     })
 
-    const { onResult } = useQuery<RoomMessageOuput, RoomMessageInput>(RoomMessages, () => ({
+    const { onResult, refetch } = useQuery<RoomMessageOuput, RoomMessageInput>(RoomMessages, {
       getRoomMessageInput: {
         id: roomIdSelected.value,
         skip: message.skip,
         limit: message.limit
       }
-    }))
+    })
 
     onResult(({ data }) => {
       if (data.roomMessage.result) {
         message.pageAvailable = data.roomMessage.value.pageAvailable
         message.moreAvailable = data.roomMessage.value.moreAvailable
-        message.values = data.roomMessage.value.messages
+        message.values = [...message.values, ...data.roomMessage.value.messages]
+        autoScrollToBottom()
       }
     })
 
@@ -126,6 +142,7 @@ export default defineComponent({
           showErrorSwal(data.addRoomMessage.message)
           return
         }
+        autoScrollToBottom()
       } catch (error) {
         showErrorSwal(error.message)
       } finally {
@@ -144,13 +161,46 @@ export default defineComponent({
       console.log('onAddFiles')
     }
 
+    const autoScrollToBottomUp = () => {
+      const scrollBar = document.querySelector('#scrollBar')
+      if (scrollBar) {
+        scrollBar.scroll({
+          top: 95 * 4,
+          left: 0,
+          behavior: 'smooth'
+        })
+      }
+    }
+
+    const loadMore = async () => {
+      message.page += 1
+      message.skip = message.limit * message.page - message.limit
+      await refetch({
+        getRoomMessageInput: {
+          id: roomIdSelected.value,
+          skip: message.skip,
+          limit: message.limit
+        }
+      })
+      autoScrollToBottomUp()
+    }
+
+    const debounceInfiniteHandler = debounce(() => loadMore(), 500)
+
+    const onScrollUp = () => {
+      if (!message.moreAvailable) return
+      debounceInfiniteHandler()
+    }
+
     return {
       onSubmitForm,
       form,
       onAddFiles,
       onClickUploadFile,
       message,
-      isMe
+      isMe,
+      messagesReversed,
+      onScrollUp
     }
   }
 })

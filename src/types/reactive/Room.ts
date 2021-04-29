@@ -6,6 +6,7 @@ type MessageReactive = {
     values: MessageItem[],
     moreAvailable: boolean,
     pageAvailable: number
+    page:number
 }
 
 export {
