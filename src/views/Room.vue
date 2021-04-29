@@ -102,6 +102,7 @@ export default defineComponent({
     onMounted(() => {
       mitt.roomMessageAdded.listen((messageAdded) => {
         message.values.unshift(messageAdded)
+        autoScrollToBottom()
       })
     })
 
@@ -150,7 +151,6 @@ export default defineComponent({
           showErrorSwal(data.addRoomMessage.message)
           return
         }
-        autoScrollToBottom()
       } catch (error) {
         showErrorSwal(error.message)
       } finally {
