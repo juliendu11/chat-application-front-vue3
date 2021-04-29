@@ -42,6 +42,7 @@ export default defineComponent({
         store.member.updateEmail(result.data.myInformation.email)
         store.member.updateUsername(result.data.myInformation.username)
         store.member.updateId(result.data.myInformation._id)
+        store.member.updateProfilPic(result.data.myInformation.profilPic)
       }
     })
   }

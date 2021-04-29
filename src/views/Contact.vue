@@ -34,21 +34,28 @@ import ContactCard from '@/components/cards/ContactCard.vue'
 
 import MembersInfo from '@/graphql/member/queries/MembersInfo.gql'
 import { MembersInfoInput, MembersInfoOuput } from '@/types/graphql/member/MembersInfo'
+import { useStore } from '../store/Store'
 
 export default defineComponent({
   name: 'Contact',
   components: { ContactCard },
   setup () {
+    const store = useStore()
+
     const { result } = useQuery<MembersInfoOuput, MembersInfoInput>(MembersInfo)
 
     const users = useResult(result, [], (data) => data.membersInfo.members)
 
     const onlineUsers = computed(() => {
-      return users.value.filter((x) => x.isOnline)
+      return users.value
+        .filter((x) => x.isOnline)
+        .filter((x) => x._id !== store.member.getId())
     })
 
     const offlineUsers = computed(() => {
-      return users.value.filter((x) => !x.isOnline)
+      return users.value
+        .filter((x) => !x.isOnline)
+        .filter((x) => x._id !== store.member.getId())
     })
 
     return {

@@ -1,16 +1,17 @@
 <template>
   <div class="user-pic">
-        <img v-if="image && !imageError" :src="image" :alt="username + ' profil picture'" @error="onImageError">
-        <span else>
+        <img v-if="realImageUrl && !imageError" :src="realImageUrl" :alt="username + ' profil picture'" @error="onImageError">
+        <span v-else-if="!realImageUrl||imageError">
           {{capitalizeAndGetFirstLetter(username)}}
         </span>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 
 import { capitalizeAndGetFirstLetter } from '@/common/text-format'
+import { getProfilPicUrl } from '@/helpers/path'
 
 export default defineComponent({
   name: 'UserPic',
@@ -24,17 +25,22 @@ export default defineComponent({
       default: ''
     }
   },
-  setup () {
+  setup (props) {
     const imageError = ref(false)
 
     const onImageError = () => {
       imageError.value = true
     }
 
+    const realImageUrl = computed(() => {
+      return getProfilPicUrl(props.image)
+    })
+
     return {
       capitalizeAndGetFirstLetter,
       onImageError,
-      imageError
+      imageError,
+      realImageUrl
     }
   }
 })

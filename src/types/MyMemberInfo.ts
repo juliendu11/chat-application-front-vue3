@@ -1,6 +1,6 @@
 type MyMemberInfo = {
     email: string
-    profilPic: string|null
+    profilPic: string
     username: string
     _id: string
 }

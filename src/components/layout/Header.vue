@@ -3,23 +3,24 @@
       <Logo/>
       <nav class="nav">
         <ul>
-          <li :class="{'active':activePage === 'conversation'}"><a href="#" @click.prevent="onClickChangePage('conversation')">Conversation</a></li>
-          <li :class="{'active':activePage === 'contacts'}"><a href="#" @click.prevent="onClickChangePage('contacts')">Contacts</a></li>
-          <li :class="{'active':activePage === 'tasks'}"><a href="#" @click.prevent="onClickChangePage('tasks')">Tasks</a></li>
-          <li :class="{'active':activePage === 'settings'}"><a href="#" @click.prevent="onClickChangePage('settings')">Settings</a></li>
+          <li :class="{'active':$route.name === 'Home'}"><a href="#" @click.prevent="onClickChangePage('conversation')">Conversation</a></li>
+          <li :class="{'active':$route.name === 'Contacts'}"><a href="#" @click.prevent="onClickChangePage('contacts')">Contacts</a></li>
+          <li :class="{'active':$route.name === 'Tasks'}"><a href="#" @click.prevent="onClickChangePage('tasks')">Tasks</a></li>
+          <li :class="{'active':$route.name === 'Settings'}"><a href="#" @click.prevent="onClickChangePage('settings')">Settings</a></li>
         </ul>
       </nav>
-      <UserPic username="Test" @click="onClickOpenProfil"/>
+      <UserPic :username="username" :image="profilPic" @click="onClickOpenProfil"/>
     </header>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 
 import Logo from '@/components/Logo.vue'
 import UserPic from '@/components/UserPic.vue'
 import { useMitt } from '../../plugins/mitt'
 import { useRouter } from 'vue-router'
+import { getProfilInformation } from '@/common/profil'
 
 export default defineComponent({
   name: 'Header',
@@ -31,14 +32,11 @@ export default defineComponent({
     const mitt = useMitt()
     const router = useRouter()
 
-    const activePage = ref('conversation')
-
     const onClickOpenProfil = () => {
       mitt.rightDrawer.emit()
     }
 
     const onClickChangePage = (toPage:string) => {
-      activePage.value = toPage
       if (toPage === 'conversation') {
         router.push('/')
         return
@@ -48,8 +46,8 @@ export default defineComponent({
 
     return {
       onClickOpenProfil,
-      activePage,
-      onClickChangePage
+      onClickChangePage,
+      ...getProfilInformation()
     }
   }
 })

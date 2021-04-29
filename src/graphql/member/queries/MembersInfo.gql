@@ -3,6 +3,7 @@ query {
     message
     result
     members {
+      _id
       email
       username
       profilPic

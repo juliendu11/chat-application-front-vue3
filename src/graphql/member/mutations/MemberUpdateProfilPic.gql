@@ -1,0 +1,7 @@
+
+mutation membersUpdateProfilPic($membersUpdateProfilPicInput: MembersUpdateProfilPicInput!) {
+  membersUpdateProfilPic(membersUpdateProfilPicInput: $membersUpdateProfilPicInput) {
+    message
+    result
+  }
+}
