@@ -1,0 +1,7 @@
+
+mutation conversationSendMessage($conversationSendMessageInput: ConversationSendMessageInput!) {
+  conversationSendMessage(conversationSendMessageInput: $conversationSendMessageInput) {
+   message
+  result
+  }
+}

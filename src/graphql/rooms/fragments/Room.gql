@@ -1,4 +1,4 @@
-#import "../fragments/Message.gql"
+#import "../../fragments/Message.gql"
 
 fragment roomField on Room {
     _id

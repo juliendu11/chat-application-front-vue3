@@ -131,7 +131,6 @@ export default defineComponent({
 
     onResult(({ data }) => {
       if (data.roomMessage.result) {
-        console.log('result')
         message.pageAvailable = data.roomMessage.value.pageAvailable
         message.moreAvailable = data.roomMessage.value.moreAvailable
         message.values = [...message.values, ...data.roomMessage.value.messages]

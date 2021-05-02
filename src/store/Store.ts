@@ -1,4 +1,5 @@
 import { inject } from 'vue'
+import { Conversation } from './Conversation'
 import { Member } from './Member'
 import { Room } from './Room'
 
@@ -9,6 +10,7 @@ const LOCAL_STORAGE_NAME = 'store'
 class Store {
   member:Member = new Member()
   room:Room = new Room()
+  conversation:Conversation = new Conversation()
 
   constructor () {
     this.rehydrate()
@@ -28,6 +30,7 @@ class Store {
       const parsed:this = JSON.parse(data)
       this.member.init(parsed.member)
       this.room.init(parsed.room)
+      this.conversation.init(parsed.conversation)
     }
   }
 }

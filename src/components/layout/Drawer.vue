@@ -54,7 +54,7 @@
           class="conversation-item"
           v-for="(conversation, z) in conversations"
           :key="z"
-          @click="onClickOpenPrivateConversation(getOtherMember(conversation.members).username)"
+          @click="onClickOpenPrivateConversation(conversation)"
         >
           <div class="conversation-item__header">
             <UserPic :username="getOtherMember(conversation.members).username" :image="getOtherMember(conversation.members).profilPic"/>
@@ -121,7 +121,6 @@ export default defineComponent({
     subscribeToMore({
       document: RoomAddedSub,
       updateQuery: (previousResult, { subscriptionData }:any) => {
-        console.log(subscriptionData)
         const _previousResult = cloneDeep(previousResult)
         _previousResult.rooms.push(subscriptionData.data.roomAdded)
         return _previousResult
@@ -166,8 +165,13 @@ export default defineComponent({
       router.push('/rooms/' + room.name)
     }
 
-    const onClickOpenPrivateConversation = (username: string) => {
-      router.push('/messages/' + username)
+    const onClickOpenPrivateConversation = (conversation:Conversation) => {
+      const member = getOtherMember(conversation.members)
+
+      store.conversation.updateIdSelected(conversation._id)
+      store.conversation.updateMemberIdSelected(member._id)
+
+      router.push('/messages/' + member.username)
     }
 
     const onClickAddRoom = () => {
