@@ -87,7 +87,7 @@ export default defineComponent({
 
     const onClickLogout = () => {
       deleteToken()
-      router.push('/')
+      router.push('/login')
     }
 
     const onClickClose = () => {

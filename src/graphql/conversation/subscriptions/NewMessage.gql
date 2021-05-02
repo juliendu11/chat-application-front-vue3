@@ -1,0 +1,21 @@
+subscription {
+  conversationNewMessage {
+    last_message {
+      message
+      date
+      user {
+        _id
+        username
+        email
+        profilPic
+      }
+    }
+    _id
+    members {
+      _id
+      username
+      email
+      profilPic
+    }
+  }
+}

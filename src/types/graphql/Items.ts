@@ -15,7 +15,14 @@ type Room = {
     name: string
 }
 
+type Conversation = {
+    _id:string
+    last_message:MessageItem[]
+    members:Member[]
+}
+
 export {
   Room,
-  Member
+  Member,
+  Conversation
 }

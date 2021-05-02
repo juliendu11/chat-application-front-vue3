@@ -14,6 +14,7 @@
              <Button
              type="btn-outline"
           color="dark"
+          @click="onClickSendMessage"
         >
           Send message
         </Button>
@@ -22,16 +23,30 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 
 import UserPic from '@/components/UserPic.vue'
+import { useRouter } from 'vue-router'
+import { Member } from '../../types/graphql/Items'
 
 export default defineComponent({
   name: 'ContactCard',
   components: { UserPic },
   props: {
     user: {
-      type: Object
+      type: Object as PropType<Member>,
+      required: true
+    }
+  },
+  setup (props) {
+    const router = useRouter()
+
+    const onClickSendMessage = () => {
+      router.push('/messages/' + props.user.username)
+    }
+
+    return {
+      onClickSendMessage
     }
   }
 })

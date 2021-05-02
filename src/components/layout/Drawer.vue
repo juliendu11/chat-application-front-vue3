@@ -52,22 +52,22 @@
       <div v-show="selectedTab === 1">
         <div
           class="conversation-item"
-          v-for="(pm, z) in privateMessages"
+          v-for="(conversation, z) in conversations"
           :key="z"
-          @click="onClickOpenPrivateConversation(pm.username)"
+          @click="onClickOpenPrivateConversation(getOtherMember(conversation.members).username)"
         >
           <div class="conversation-item__header">
-            <img :src="pm.profilPic" :alt="pm.username" />
+            <UserPic :username="getOtherMember(conversation.members).username" :image="getOtherMember(conversation.members).profilPic"/>
             <i class="fa fa-circle" aria-hidden="true"></i>
           </div>
           <div class="conversation-item__content">
-            <span>{{ pm.username }}</span>
+            <span>{{ getOtherMember(conversation.members).username }}</span>
             <p>
-              {{ pm.message }}
+              {{ conversation.last_message.message }}
             </p>
           </div>
           <div class="conversation-item__extra">
-            <span>{{ formatDateFromNow(pm.date) }}</span>
+            <span>{{ formatDateFromNow(conversation.last_message.date) }}</span>
           </div>
         </div>
       </div>
@@ -76,26 +76,31 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
+import { computed, defineComponent, ref, watch } from 'vue'
 import { formatDateFromNow } from '@/common/date'
 import { useRouter } from 'vue-router'
 import { useQuery, useResult, useSubscription, useApolloClient } from '@vue/apollo-composable'
 import { cloneDeep } from '@apollo/client/utilities'
 
-import PrivateMessageItem from '@/types/PrivateMessageItem'
-import { Room } from '@/types/graphql/Items'
+import { Conversation, Member, Room } from '@/types/graphql/Items'
 import { RoomMessageAddedOuput } from '@/types/graphql/rooms/RoomMessageAdded'
+import { ConversationsInput, ConversationsOutput } from '@/types/graphql/conversation/Conversations'
 
 import Rooms from '@/graphql/rooms/queries/Rooms.gql'
 import RoomAddedSub from '@/graphql/rooms/subscriptions/RoomAdded.gql'
 import RoomMessageAddedSub from '@/graphql/rooms/subscriptions/RoomMessageAdded.gql'
 
+import Conversations from '@/graphql/conversation/queries/Conversations.gql'
+
 import { useMitt } from '../../plugins/mitt'
 import DialogContainerNames from '../../enums/DialogContainerNames'
 import { useStore } from '../../store/Store'
 
+import UserPic from '@/components/UserPic.vue'
+
 export default defineComponent({
   name: 'Drawer',
+  components: { UserPic },
   setup () {
     const router = useRouter()
     const mitt = useMitt()
@@ -151,14 +156,9 @@ export default defineComponent({
       }
     })
 
-    const privateMessages = ref<PrivateMessageItem[]>([
-      {
-        username: 'test',
-        date: new Date(),
-        message: 'Hello',
-        profilPic: 'https://randomuser.me/api/portraits/men/14.jpg'
-      }
-    ])
+    const { result: conversationResult } = useQuery<ConversationsOutput, ConversationsInput>(Conversations)
+
+    const conversations = useResult(conversationResult, [])
 
     const onClickOpenRoomConversation = (room: Room) => {
       store.room.updateIdSelected(room._id)
@@ -177,15 +177,20 @@ export default defineComponent({
       })
     }
 
+    const getOtherMember = (members:Member[]) => {
+      return members.filter(x => x._id !== store.member.getId())[0]
+    }
+
     return {
       selectedTab,
       onClickChangeTab,
       rooms,
-      privateMessages,
+      conversations,
       formatDateFromNow,
       onClickOpenRoomConversation,
       onClickOpenPrivateConversation,
-      onClickAddRoom
+      onClickAddRoom,
+      getOtherMember
     }
   }
 })
