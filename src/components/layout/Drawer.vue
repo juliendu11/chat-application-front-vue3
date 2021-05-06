@@ -76,7 +76,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, watch } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { formatDateFromNow } from '@/common/date'
 import { useRouter } from 'vue-router'
 import { useQuery, useResult, useSubscription, useApolloClient } from '@vue/apollo-composable'
@@ -85,12 +85,14 @@ import { cloneDeep } from '@apollo/client/utilities'
 import { Conversation, Member, Room } from '@/types/graphql/Items'
 import { RoomMessageAddedOuput } from '@/types/graphql/rooms/RoomMessageAdded'
 import { ConversationsInput, ConversationsOutput } from '@/types/graphql/conversation/Conversations'
+import { NewMessageInput, NewMessageOutput } from '@/types/graphql/conversation/NewMessage'
 
 import Rooms from '@/graphql/rooms/queries/Rooms.gql'
 import RoomAddedSub from '@/graphql/rooms/subscriptions/RoomAdded.gql'
 import RoomMessageAddedSub from '@/graphql/rooms/subscriptions/RoomMessageAdded.gql'
 
 import Conversations from '@/graphql/conversation/queries/Conversations.gql'
+import ConversationNewMessage from '@/graphql/conversation/subscriptions/NewMessage.gql'
 
 import { useMitt } from '../../plugins/mitt'
 import DialogContainerNames from '../../enums/DialogContainerNames'
@@ -155,7 +157,18 @@ export default defineComponent({
       }
     })
 
-    const { result: conversationResult } = useQuery<ConversationsOutput, ConversationsInput>(Conversations)
+    const { result: conversationResult, subscribeToMore: conversationSubscribeToMore } = useQuery<ConversationsOutput, ConversationsInput>(Conversations)
+    conversationSubscribeToMore({
+      document: ConversationNewMessage,
+      updateQuery: (previousResult, { subscriptionData }:any) => {
+        const _previousResult = cloneDeep(previousResult)
+        const correspondingConversation = _previousResult.conversations.find(x => x._id === subscriptionData.data.conversationNewMessage._id)
+        if (correspondingConversation) {
+          correspondingConversation.last_message = subscriptionData.data.conversationNewMessage.last_message
+        }
+        return _previousResult as any
+      }
+    })
 
     const conversations = useResult(conversationResult, [])
 
