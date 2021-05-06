@@ -1,6 +1,6 @@
 .home {
     display: grid;
-    grid-template-columns: minmax(150px, 20%) auto;
+    grid-template-columns: minmax(400px, 20%) auto;
     grid-template-rows: auto 1fr;
     position: relative;
 
@@ -20,5 +20,14 @@
 
     &__content {
         grid-column: 2/3;
+    }
+
+    @media screen and (max-width: map-get($breakpoints, 'medium')) {
+        display: flex;
+        flex-direction: column;
+
+        &__content{
+            display: none;
+        }
     }
 }

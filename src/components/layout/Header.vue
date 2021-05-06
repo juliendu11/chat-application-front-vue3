@@ -1,6 +1,6 @@
 <template>
-  <header>
-      <Logo/>
+  <header class="header">
+      <Logo class="header__logo"/>
       <nav class="nav">
         <ul>
           <li :class="{'active':$route.name === 'Home'}"><a href="#" @click.prevent="onClickChangePage('conversation')">Conversation</a></li>

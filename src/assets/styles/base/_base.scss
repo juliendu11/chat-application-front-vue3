@@ -16,7 +16,6 @@ body {
 
   @include theme-aware("background-color", "color-background");
   font-family: 'Roboto', sans-serif;
-  overflow: hidden;
 }
 
 input,

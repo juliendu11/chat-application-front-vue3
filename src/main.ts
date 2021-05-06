@@ -1,12 +1,15 @@
 import { createApp } from 'vue'
 import dayjs from 'dayjs'
 import PerfectScrollbar from 'vue3-perfect-scrollbar'
+import Toast from 'vue-toastification'
+
 import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
 
 import './assets/styles/main.scss'
 import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css'
+import 'vue-toastification/dist/index.css'
 
 import FormGroup from '@/components/base/FormGroup.vue'
 import Button from '@/components/base/Button.vue'
@@ -47,6 +50,7 @@ StorePlugin(app)
 
 app.use(PerfectScrollbar)
 app.use(router)
+app.use(Toast, { maxToasts: 10 })
 app.component('FormGroup', FormGroup)
 app.component('Button', Button)
 app.component('Switch', Switch)

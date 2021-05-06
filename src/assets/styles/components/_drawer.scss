@@ -55,7 +55,14 @@
                 @include theme-aware('color', 'color-primary');
             }
         }
+    }
 
-      
+    @media screen and (max-width: map-get($breakpoints, 'medium')) {
+        &__search {
+            display: none;
+        }
+        &__content {
+            padding: 0;
+        }
     }
 }

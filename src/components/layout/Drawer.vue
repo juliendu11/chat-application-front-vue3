@@ -123,6 +123,7 @@ import DialogContainerNames from '../../enums/DialogContainerNames'
 import { useStore } from '../../store/Store'
 
 import UserPic from '@/components/UserPic.vue'
+import { useToast } from 'vue-toastification'
 
 export default defineComponent({
   name: 'Drawer',
@@ -131,6 +132,7 @@ export default defineComponent({
     const router = useRouter()
     const mitt = useMitt()
     const store = useStore()
+    const toast = useToast()
 
     const { resolveClient } = useApolloClient()
     const client = resolveClient()
@@ -218,6 +220,11 @@ export default defineComponent({
         mitt.conversationMessageAdded.emit(
           val.conversationNewMessage.last_message
         )
+      }
+
+      // If is not me
+      if (val.conversationNewMessage.last_message.user._id !== store.member.getId()) {
+        toast.info(`New message from: ${val.conversationNewMessage.last_message.user.username}`)
       }
 
       client.writeQuery({

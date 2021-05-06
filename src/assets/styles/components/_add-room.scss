@@ -6,4 +6,10 @@
     button {
         width: 90%;
     }
+
+    @media screen and (max-width: map-get($breakpoints, 'medium')) {
+        padding: 0 1rem;
+        
+        button{width: 100%;}
+    }
 }

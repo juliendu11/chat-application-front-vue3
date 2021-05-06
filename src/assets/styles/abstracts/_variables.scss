@@ -1,17 +1,8 @@
 // -----------------------------------------------------------------------------
 // This file contains all application-wide Sass variables.
 // -----------------------------------------------------------------------------
-$container: (
-    "xm": 100%, 
-    "sm": 540px, 
-    "medium": 720px, 
-    "lg": 960px, 
-    "xl": 1140px, 
-    "xxl": 1320px, 
-);
-
 $breakpoints: (
-    "xm": 576px, 
+    "xm": 350px, 
     "sm": 576px, 
     "medium": 768px, 
     "lg": 992px, 
@@ -20,4 +11,4 @@ $breakpoints: (
 );
 
 $header-height:60px;
-$right-drawer-width:20%;
+$right-drawer-width:300px;
