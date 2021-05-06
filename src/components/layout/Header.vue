@@ -5,8 +5,6 @@
         <ul>
           <li :class="{'active':$route.name === 'Home'}"><a href="#" @click.prevent="onClickChangePage('conversation')">Conversation</a></li>
           <li :class="{'active':$route.name === 'Contacts'}"><a href="#" @click.prevent="onClickChangePage('contacts')">Contacts</a></li>
-          <li :class="{'active':$route.name === 'Tasks'}"><a href="#" @click.prevent="onClickChangePage('tasks')">Tasks</a></li>
-          <li :class="{'active':$route.name === 'Settings'}"><a href="#" @click.prevent="onClickChangePage('settings')">Settings</a></li>
         </ul>
       </nav>
       <UserPic :username="username" :image="profilPic" @click="onClickOpenProfil"/>
