@@ -5,7 +5,7 @@
    }
 
    li {
-        padding: 20px 20px;
+        margin: 0 20px;
         position: relative;
 
         &:hover,
@@ -21,5 +21,11 @@
                 font-size: 35px;
             }
         }
+   }
+
+   a {
+        display:inline-block;
+       height: 100%;
+       padding: 20px 0;
    }
 }
