@@ -1,6 +1,6 @@
 import { App, inject } from 'vue'
 import mitt, { Emitter } from 'mitt'
-import MittPlugin, { DialogContainerCallBack, RightDrawerCallBack, RoomMessageAddedCallback } from '@/types/plugins/Mitt'
+import MittPlugin, { ConversationMessageAddedCallback, DialogContainerCallBack, RightDrawerCallBack, RoomMessageAddedCallback } from '@/types/plugins/Mitt'
 import DialogContainerArgs from '@/types/emitted/DialogContainerArgs'
 import MessageItem from '../types/MessageItem'
 
@@ -11,6 +11,7 @@ export const MittSymbol = Symbol('mitt')
 export const DIALOG_CONTAINER_EMITTER = 'dialog-container'
 export const RIGHT_DRAWER_EMITTER = 'right-drawer'
 export const ROOM_MESSAGE_ADDED_EMITTER = 'room-message-added'
+export const CONVERSATION_MESSAGE_ADDED_EMITTER = 'conversation-message-added'
 
 export function useMitt (): MittPlugin {
   const mitt = inject(MittSymbol)
@@ -30,6 +31,10 @@ export function useMitt (): MittPlugin {
     roomMessageAdded: {
       emit: (message:MessageItem) => { (mitt as Emitter).emit(ROOM_MESSAGE_ADDED_EMITTER, message) },
       listen: (handler: RoomMessageAddedCallback) => { (mitt as Emitter).on(ROOM_MESSAGE_ADDED_EMITTER, (n) => handler(n)) }
+    },
+    conversationMessageAdded: {
+      emit: (message:MessageItem) => { (mitt as Emitter).emit(CONVERSATION_MESSAGE_ADDED_EMITTER, message) },
+      listen: (handler: ConversationMessageAddedCallback) => { (mitt as Emitter).on(CONVERSATION_MESSAGE_ADDED_EMITTER, (n) => handler(n)) }
     }
   }
 }

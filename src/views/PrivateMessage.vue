@@ -121,7 +121,7 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      mitt.roomMessageAdded.listen((messageAdded) => {
+      mitt.conversationMessageAdded.listen((messageAdded) => {
         message.values.unshift(messageAdded)
         autoScrollToBottom()
       })

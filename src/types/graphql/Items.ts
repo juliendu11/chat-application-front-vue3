@@ -17,7 +17,7 @@ type Room = {
 
 type Conversation = {
     _id:string
-    last_message:MessageItem[]
+    last_message:MessageItem
     members:Member[]
 }
 

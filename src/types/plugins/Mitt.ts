@@ -4,6 +4,7 @@ import MessageItem from '../MessageItem'
 export type DialogContainerCallBack = (args: DialogContainerArgs) => any;
 export type RightDrawerCallBack = () => any;
 export type RoomMessageAddedCallback = (message:MessageItem) => any;
+export type ConversationMessageAddedCallback = (message:MessageItem) => any;
 
 type Mitt = {
     dialogContainer:{
@@ -17,6 +18,10 @@ type Mitt = {
     roomMessageAdded:{
         emit:(message:MessageItem) => void
         listen:(handler:RoomMessageAddedCallback) => void
+    },
+    conversationMessageAdded:{
+        emit:(message:MessageItem) => void
+        listen:(handler:ConversationMessageAddedCallback) => void
     }
 }
 

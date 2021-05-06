@@ -22,25 +22,35 @@
     <div class="drawer__content">
       <div v-show="selectedTab === 0">
         <perfect-scrollbar>
-        <div
-          class="conversation-item"
-          v-for="(room, i) in rooms"
-          :key="i"
-          @click="onClickOpenRoomConversation(room)"
-        >
-          <div class="conversation-item__header">
-            <span>{{ room.name }}</span>
+          <div
+            class="conversation-item"
+            v-for="(room, i) in rooms"
+            :key="i"
+            @click="onClickOpenRoomConversation(room)"
+          >
+            <div class="conversation-item__header">
+              <span>{{ room.name }}</span>
+            </div>
+            <div class="conversation-item__content">
+              <span>{{
+                room.last_message ? room.last_message.user.username : room.name
+              }}</span>
+              <p>
+                {{
+                  room.last_message ? room.last_message.message : "Hello there!"
+                }}
+              </p>
+            </div>
+            <div class="conversation-item__extra">
+              <span>
+                {{
+                  room.last_message
+                    ? formatDateFromNow(room.last_message.date)
+                    : ""
+                }}</span
+              >
+            </div>
           </div>
-          <div class="conversation-item__content">
-            <span>{{ room.last_message ? room.last_message.user.username : room.name }}</span>
-            <p>
-              {{  room.last_message ? room.last_message.message  :"Hello there!" }}
-            </p>
-          </div>
-          <div class="conversation-item__extra">
-            <span> {{ room.last_message ? formatDateFromNow(room.last_message.date) : "" }}</span>
-          </div>
-        </div>
         </perfect-scrollbar>
         <div class="add-room">
           <Button :rounded="true" color="primary" @click="onClickAddRoom">
@@ -57,7 +67,10 @@
           @click="onClickOpenPrivateConversation(conversation)"
         >
           <div class="conversation-item__header">
-            <UserPic :username="getOtherMember(conversation.members).username" :image="getOtherMember(conversation.members).profilPic"/>
+            <UserPic
+              :username="getOtherMember(conversation.members).username"
+              :image="getOtherMember(conversation.members).profilPic"
+            />
             <i class="fa fa-circle" aria-hidden="true"></i>
           </div>
           <div class="conversation-item__content">
@@ -79,13 +92,24 @@
 import { defineComponent, ref, watch } from 'vue'
 import { formatDateFromNow } from '@/common/date'
 import { useRouter } from 'vue-router'
-import { useQuery, useResult, useSubscription, useApolloClient } from '@vue/apollo-composable'
+import {
+  useQuery,
+  useResult,
+  useSubscription,
+  useApolloClient
+} from '@vue/apollo-composable'
 import { cloneDeep } from '@apollo/client/utilities'
 
 import { Conversation, Member, Room } from '@/types/graphql/Items'
 import { RoomMessageAddedOuput } from '@/types/graphql/rooms/RoomMessageAdded'
-import { ConversationsInput, ConversationsOutput } from '@/types/graphql/conversation/Conversations'
-import { NewMessageInput, NewMessageOutput } from '@/types/graphql/conversation/NewMessage'
+import {
+  ConversationsInput,
+  ConversationsOutput
+} from '@/types/graphql/conversation/Conversations'
+import {
+  NewMessageInput,
+  NewMessageOutput
+} from '@/types/graphql/conversation/NewMessage'
 
 import Rooms from '@/graphql/rooms/queries/Rooms.gql'
 import RoomAddedSub from '@/graphql/rooms/subscriptions/RoomAdded.gql'
@@ -117,27 +141,33 @@ export default defineComponent({
       selectedTab.value = tab
     }
 
-    const { result: getRoomsResult, subscribeToMore } = useQuery<{rooms:Room[]}>(Rooms)
+    const { result: getRoomsResult, subscribeToMore } = useQuery<{
+      rooms: Room[];
+    }>(Rooms)
     const rooms = useResult(getRoomsResult)
 
     subscribeToMore({
       document: RoomAddedSub,
-      updateQuery: (previousResult, { subscriptionData }:any) => {
+      updateQuery: (previousResult, { subscriptionData }: any) => {
         const _previousResult = cloneDeep(previousResult)
         _previousResult.rooms.push(subscriptionData.data.roomAdded)
         return _previousResult
       }
     })
 
-    const { result } = useSubscription<RoomMessageAddedOuput>(RoomMessageAddedSub)
+    const {
+      result: roomMessageAddedResult
+    } = useSubscription<RoomMessageAddedOuput>(RoomMessageAddedSub)
 
-    watch(result, (val) => {
+    watch(roomMessageAddedResult, (val) => {
       if (val.roomMessageAdded) {
-        const data = client.readQuery<{rooms:Room[]}>({ query: Rooms })
+        const data = client.readQuery<{ rooms: Room[] }>({ query: Rooms })
         if (!data) return
 
         const roomsCopy = cloneDeep(data.rooms)
-        const correspondingRoom = roomsCopy.find(x => x._id === val.roomMessageAdded.id)
+        const correspondingRoom = roomsCopy.find(
+          (x) => x._id === val.roomMessageAdded.id
+        )
 
         if (correspondingRoom) {
           correspondingRoom.last_message = val.roomMessageAdded.message
@@ -157,17 +187,45 @@ export default defineComponent({
       }
     })
 
-    const { result: conversationResult, subscribeToMore: conversationSubscribeToMore } = useQuery<ConversationsOutput, ConversationsInput>(Conversations)
-    conversationSubscribeToMore({
-      document: ConversationNewMessage,
-      updateQuery: (previousResult, { subscriptionData }:any) => {
-        const _previousResult = cloneDeep(previousResult)
-        const correspondingConversation = _previousResult.conversations.find(x => x._id === subscriptionData.data.conversationNewMessage._id)
-        if (correspondingConversation) {
-          correspondingConversation.last_message = subscriptionData.data.conversationNewMessage.last_message
-        }
-        return _previousResult as any
+    const { result: conversationResult } = useQuery<
+      ConversationsOutput,
+      ConversationsInput
+    >(Conversations)
+
+    const { result: conversationMessageAddedResult } = useSubscription<
+      NewMessageOutput,
+      NewMessageInput
+    >(ConversationNewMessage)
+
+    watch(conversationMessageAddedResult, (val) => {
+      const data = client.readQuery<ConversationsOutput, ConversationsInput>({
+        query: Conversations
+      })
+      if (!data) return
+
+      const conversationsCopy = cloneDeep(data.conversations)
+      const correspondingConversation = conversationsCopy.find(
+        (x) => x._id === val.conversationNewMessage._id
+      )
+
+      if (correspondingConversation) {
+        correspondingConversation.last_message =
+          val.conversationNewMessage.last_message
       }
+
+      if (store.room.getIdSelected()) {
+        // Update conversation query
+        mitt.conversationMessageAdded.emit(
+          val.conversationNewMessage.last_message
+        )
+      }
+
+      client.writeQuery({
+        query: Conversations,
+        data: {
+          conversations: conversationsCopy
+        }
+      })
     })
 
     const conversations = useResult(conversationResult, [])
@@ -178,7 +236,7 @@ export default defineComponent({
       router.push('/rooms/' + room.name)
     }
 
-    const onClickOpenPrivateConversation = (conversation:Conversation) => {
+    const onClickOpenPrivateConversation = (conversation: Conversation) => {
       const member = getOtherMember(conversation.members)
 
       store.conversation.updateIdSelected(conversation._id)
@@ -190,12 +248,14 @@ export default defineComponent({
     const onClickAddRoom = () => {
       mitt.dialogContainer.emit({
         name: DialogContainerNames.ADD_ROOM,
-        exitFunc: () => { return 1 }
+        exitFunc: () => {
+          return 1
+        }
       })
     }
 
-    const getOtherMember = (members:Member[]) => {
-      return members.filter(x => x._id !== store.member.getId())[0]
+    const getOtherMember = (members: Member[]) => {
+      return members.filter((x) => x._id !== store.member.getId())[0]
     }
 
     return {
