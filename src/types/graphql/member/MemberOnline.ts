@@ -1,4 +1,4 @@
-import { Member } from '@/store/Member'
+import { Member } from '../Items'
 
 export type MemberOnlineInput = {}
 

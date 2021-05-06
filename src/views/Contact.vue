@@ -28,19 +28,24 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { computed, defineComponent, onMounted, ref } from 'vue'
+import { useQuery, useResult, useApolloClient } from '@vue/apollo-composable'
 import ContactCard from '@/components/cards/ContactCard.vue'
 
 import MembersInfo from '@/graphql/member/queries/MembersInfo.gql'
 import { MembersInfoInput, MembersInfoOuput } from '@/types/graphql/member/MembersInfo'
 import { useStore } from '../store/Store'
+import { useMitt } from '@/plugins/mitt'
+import { cloneDeep } from '@apollo/client/utilities'
 
 export default defineComponent({
   name: 'Contact',
   components: { ContactCard },
   setup () {
     const store = useStore()
+    const mitt = useMitt()
+    const { resolveClient } = useApolloClient()
+    const client = resolveClient()
 
     const { result } = useQuery<MembersInfoOuput, MembersInfoInput>(MembersInfo)
 
@@ -56,6 +61,41 @@ export default defineComponent({
       return users.value
         .filter((x) => !x.isOnline)
         .filter((x) => x._id !== store.member.getId())
+    })
+
+    const updateUserOnlineStatus = (memberIndex:number, isOnline:boolean) => {
+      const data = client.readQuery<MembersInfoOuput, MembersInfoInput>({
+        query: MembersInfo
+      })
+      if (!data) return
+
+      const copyMembers = cloneDeep(data.membersInfo.members)
+      copyMembers[memberIndex].isOnline = isOnline
+
+      client.writeQuery<MembersInfoOuput>({
+        query: MembersInfo,
+        data: {
+          membersInfo: {
+            ...data.membersInfo,
+            members: copyMembers
+          }
+        }
+      })
+    }
+
+    const subscribe = () => {
+      mitt.memberOnlineStatusChanged.listen((args) => {
+        if (users.value.length === 0) return
+
+        const findMemberIndex = users.value.findIndex(x => args.member._id === x._id)
+        if (findMemberIndex !== -1) {
+          updateUserOnlineStatus(findMemberIndex, args.isOnline)
+        }
+      })
+    }
+
+    onMounted(() => {
+      subscribe()
     })
 
     return {

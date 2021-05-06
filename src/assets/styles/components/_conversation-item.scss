@@ -28,6 +28,16 @@
             align-items: center;
             justify-content: center;
         }
+
+        i {
+            @include theme-aware('color', 'color-danger');
+        }
+
+        &--online {
+            i {
+                @include theme-aware('color', 'color-success');
+            }
+        }
     }
 
     &__content {

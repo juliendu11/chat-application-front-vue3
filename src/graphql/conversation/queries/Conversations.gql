@@ -1,21 +1,23 @@
 query {
   conversations {
     _id
-    last_message{
-        date
-        message
-        user{
-            _id
-            username
-            email
-            profilPic
-        }
+    last_message {
+      date
+      message
+      user {
+        _id
+        username
+        email
+        profilPic
+        isOnline
+      }
     }
-    members{
-         _id
-            username
-            email
-            profilPic
+    members {
+      _id
+      username
+      email
+      profilPic
+      isOnline
     }
   }
 }

@@ -1,1 +1,1 @@
-subscription{memberOffline{_id email username profilPic}}
+subscription{memberOnline{_id email username profilPic}}

@@ -1,10 +1,13 @@
 import DialogContainerArgs from '../emitted/DialogContainerArgs'
+import MemberOnlineStatusChangedArgs from '../emitted/MemberOnlineStatusChangedArgs'
+import { Member } from '../graphql/Items'
 import MessageItem from '../MessageItem'
 
 export type DialogContainerCallBack = (args: DialogContainerArgs) => any;
 export type RightDrawerCallBack = () => any;
 export type RoomMessageAddedCallback = (message:MessageItem) => any;
 export type ConversationMessageAddedCallback = (message:MessageItem) => any;
+export type MemberOnlineStatusChangedCallback = (args:MemberOnlineStatusChangedArgs) => any;
 
 type Mitt = {
     dialogContainer:{
@@ -22,6 +25,10 @@ type Mitt = {
     conversationMessageAdded:{
         emit:(message:MessageItem) => void
         listen:(handler:ConversationMessageAddedCallback) => void
+    },
+    memberOnlineStatusChanged:{
+        emit:(args:MemberOnlineStatusChangedArgs) => void,
+        listen: (handler: MemberOnlineStatusChangedCallback) =>void
     }
 }
 

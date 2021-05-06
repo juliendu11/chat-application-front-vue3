@@ -66,7 +66,7 @@
           :key="z"
           @click="onClickOpenPrivateConversation(conversation)"
         >
-          <div class="conversation-item__header">
+          <div class="conversation-item__header" :class="{'conversation-item__header--online':isOnline(getOtherMember(conversation.members))}">
             <UserPic
               :username="getOtherMember(conversation.members).username"
               :image="getOtherMember(conversation.members).profilPic"
@@ -224,7 +224,7 @@ export default defineComponent({
 
       // If is not me
       if (val.conversationNewMessage.last_message.user._id !== store.member.getId()) {
-        toast.info(`New message from: ${val.conversationNewMessage.last_message.user.username}`)
+        toast.info(`${val.conversationNewMessage.last_message.user.username}: ${val.conversationNewMessage.last_message.message}`)
       }
 
       client.writeQuery({
@@ -265,6 +265,10 @@ export default defineComponent({
       return members.filter((x) => x._id !== store.member.getId())[0]
     }
 
+    const isOnline = (member:Member) => {
+      return member.isOnline
+    }
+
     return {
       selectedTab,
       onClickChangeTab,
@@ -274,7 +278,8 @@ export default defineComponent({
       onClickOpenRoomConversation,
       onClickOpenPrivateConversation,
       onClickAddRoom,
-      getOtherMember
+      getOtherMember,
+      isOnline
     }
   }
 })

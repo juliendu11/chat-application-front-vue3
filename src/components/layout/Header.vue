@@ -1,6 +1,6 @@
 <template>
   <header class="header">
-      <Logo class="header__logo"/>
+      <Logo class="header__logo" @click="onClickHome"/>
       <nav class="nav">
         <ul>
           <li :class="{'active':$route.name === 'Home'}"><a href="#" @click.prevent="onClickChangePage('conversation')">Conversation</a></li>
@@ -34,6 +34,10 @@ export default defineComponent({
       mitt.rightDrawer.emit()
     }
 
+    const onClickHome = () => {
+      router.push('/')
+    }
+
     const onClickChangePage = (toPage:string) => {
       if (toPage === 'conversation') {
         router.push('/')
@@ -45,7 +49,8 @@ export default defineComponent({
     return {
       onClickOpenProfil,
       onClickChangePage,
-      ...getProfilInformation()
+      ...getProfilInformation(),
+      onClickHome
     }
   }
 })
