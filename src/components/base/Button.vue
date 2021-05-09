@@ -1,6 +1,6 @@
 <template>
   <button type="submit" :class="getClass">
-    <div v-if="loading" class="btn__loading">
+    <div v-if="loading" class="btn--loading">
       <div class="loader"></div>
       <slot />
     </div>

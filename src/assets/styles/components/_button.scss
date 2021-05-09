@@ -5,15 +5,7 @@
     font-weight: 600;
     font-size: 18px;
     transition: all .3s ease;
-
-    &__loading {
-        display: flex;
-        align-items: center;
-        justify-content: center
-    }
-
     border-radius: 0.5rem;
-
 }
 
 
@@ -148,6 +140,7 @@ $theme-color in $themes {
 .btn--loading {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 1rem;
 }
 
