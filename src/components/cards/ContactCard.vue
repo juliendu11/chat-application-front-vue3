@@ -52,8 +52,8 @@ export default defineComponent({
 
     const searchCorrespondingConversation = () => {
       const data = client.readQuery<ConversationsOutput, ConversationsInput>({ query: Conversations })
-      if (data) {
-        return data.conversations.find(x => x.members.find(y => y._id === props.user._id))
+      if (data && data.conversations) {
+        return data.conversations.value.find(x => x.members.find(y => y._id === props.user._id))
       }
       return null
     }

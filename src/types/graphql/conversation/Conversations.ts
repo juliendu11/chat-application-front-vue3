@@ -5,5 +5,9 @@ import { Conversation } from '../Items'
 export type ConversationsInput = {}
 
 export type ConversationsOutput = {
-    conversations:Conversation[]
+    conversations:{
+        result:boolean,
+        message:string
+        value:Conversation[]
+    }
 }

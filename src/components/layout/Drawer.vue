@@ -110,6 +110,10 @@ import {
   NewMessageInput,
   NewMessageOutput
 } from '@/types/graphql/conversation/NewMessage'
+import {
+  RoomsInput,
+  RoomsOutput
+} from '@/types/graphql/rooms/Rooms'
 
 import Rooms from '@/graphql/rooms/queries/Rooms.gql'
 import RoomAddedSub from '@/graphql/rooms/subscriptions/RoomAdded.gql'
@@ -143,16 +147,14 @@ export default defineComponent({
       selectedTab.value = tab
     }
 
-    const { result: getRoomsResult, subscribeToMore } = useQuery<{
-      rooms: Room[];
-    }>(Rooms)
-    const rooms = useResult(getRoomsResult)
+    const { result: getRoomsResult, subscribeToMore } = useQuery<RoomsOutput, RoomsInput>(Rooms)
+    const rooms = useResult(getRoomsResult, [], data => data.rooms.value)
 
     subscribeToMore({
       document: RoomAddedSub,
       updateQuery: (previousResult, { subscriptionData }: any) => {
         const _previousResult = cloneDeep(previousResult)
-        _previousResult.rooms.push(subscriptionData.data.roomAdded)
+        _previousResult.rooms.value.push(subscriptionData.data.roomAdded)
         return _previousResult
       }
     })
@@ -163,10 +165,10 @@ export default defineComponent({
 
     watch(roomMessageAddedResult, (val) => {
       if (val.roomMessageAdded) {
-        const data = client.readQuery<{ rooms: Room[] }>({ query: Rooms })
+        const data = client.readQuery<RoomsOutput, RoomsInput>({ query: Rooms })
         if (!data) return
 
-        const roomsCopy = cloneDeep(data.rooms)
+        const roomsCopy = cloneDeep(data.rooms.value)
         const correspondingRoom = roomsCopy.find(
           (x) => x._id === val.roomMessageAdded.id
         )
@@ -183,7 +185,10 @@ export default defineComponent({
         client.writeQuery({
           query: Rooms,
           data: {
-            rooms: roomsCopy
+            rooms: {
+              ...data.rooms,
+              value: roomsCopy
+            }
           }
         })
       }
@@ -205,7 +210,7 @@ export default defineComponent({
       })
       if (!data) return
 
-      const conversationsCopy = cloneDeep(data.conversations)
+      const conversationsCopy = cloneDeep(data.conversations.value)
       const correspondingConversation = conversationsCopy.find(
         (x) => x._id === val.conversationNewMessage._id
       )
@@ -230,12 +235,15 @@ export default defineComponent({
       client.writeQuery({
         query: Conversations,
         data: {
-          conversations: conversationsCopy
+          conversations: {
+            ...data.conversations,
+            value: conversationsCopy
+          }
         }
       })
     })
 
-    const conversations = useResult(conversationResult, [])
+    const conversations = useResult(conversationResult, [], data => data.conversations.value)
 
     const onClickOpenRoomConversation = (room: Room) => {
       store.room.updateIdSelected(room._id)
