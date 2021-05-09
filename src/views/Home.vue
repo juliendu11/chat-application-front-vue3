@@ -58,6 +58,7 @@ export default defineComponent({
 
     onResult((result) => {
       if (result.data) {
+        console.log('Loading')
         store.member.updateEmail(result.data.myInformation.email)
         store.member.updateUsername(result.data.myInformation.username)
         store.member.updateId(result.data.myInformation._id)

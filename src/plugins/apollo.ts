@@ -10,6 +10,7 @@ const wsLink = new WebSocketLink({
   uri: 'ws://localhost:3000/graphql',
   options: {
     reconnect: true,
+    lazy: true,
     connectionParams: () => {
       return {
         headers: {
