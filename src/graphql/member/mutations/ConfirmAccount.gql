@@ -1,6 +1,6 @@
 
-mutation confirmAccount($confirmAccountInput: ConfirmMemberInput!) {
-  confirmAccount(confirmAccountInput: $confirmAccountInput) {
+mutation memberConfirmAccount($memberConfirmAccountInput: MemberConfirmMemberInput!) {
+  memberConfirmAccount(memberConfirmAccountInput: $memberConfirmAccountInput) {
     message
     result
   }

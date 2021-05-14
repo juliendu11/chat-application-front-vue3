@@ -14,8 +14,7 @@
 import { defineComponent, watch } from 'vue'
 import {
   useQuery,
-  useSubscription,
-  useApolloClient
+  useSubscription
 } from '@vue/apollo-composable'
 
 import MyInformation from '@/graphql/member/queries/MyInformation.gql'
@@ -30,6 +29,11 @@ import {
   MemberOfflineInput,
   MemberOfflineOutput
 } from '@/types/graphql/member/MemberOffline'
+
+import {
+  MemberMyInfoInput,
+  MemberMyInfoOutput
+} from '@/types/graphql/member/MemberMyInfo'
 
 import Drawer from '@/components/layout/Drawer.vue'
 import RightDrawer from '@/components/layout/RightDrawer.vue'
@@ -52,17 +56,16 @@ export default defineComponent({
     const store = useStore()
     const mitt = useMitt()
 
-    const { onResult } = useQuery<{ myInformation: MyMemberInfo }>(
+    const { onResult } = useQuery<MemberMyInfoOutput, MemberMyInfoInput>(
       MyInformation
     )
 
     onResult((result) => {
-      if (result.data) {
-        console.log('Loading')
-        store.member.updateEmail(result.data.myInformation.email)
-        store.member.updateUsername(result.data.myInformation.username)
-        store.member.updateId(result.data.myInformation._id)
-        store.member.updateProfilPic(result.data.myInformation.profilPic)
+      if (result.data && result.data.memberMyInformation.result) {
+        store.member.updateEmail(result.data.memberMyInformation.value.email)
+        store.member.updateUsername(result.data.memberMyInformation.value.username)
+        store.member.updateId(result.data.memberMyInformation.value._id)
+        store.member.updateProfilPic(result.data.memberMyInformation.value.profilPic)
       }
     })
 

@@ -1,7 +1,7 @@
 import MessageItem from '../../MessageItem'
 
 export type ConversationMessageInput = {
-    getConversationMessageInput: {
+    conversationMessageInput: {
         id: string
         limit: number
         skip: number

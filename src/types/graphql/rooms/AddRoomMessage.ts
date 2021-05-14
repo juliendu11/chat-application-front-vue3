@@ -1,14 +1,14 @@
 import RoomMessageItem from '../../RoomMessageItem'
 
-type AddRoomMessageInput = {
-  addRoomMessageInput: {
+type RoomAddMessageInput = {
+  roomAddMessageInput: {
     id: string
     message: string
   }
 }
 
-type AddRoomMessageOuput = {
-  addRoomMessage:{
+type RoomAddMessageOutput = {
+  roomAddMessage:{
     message: string
     result: boolean
     value: RoomMessageItem
@@ -16,6 +16,6 @@ type AddRoomMessageOuput = {
 }
 
 export {
-  AddRoomMessageInput,
-  AddRoomMessageOuput
+  RoomAddMessageInput,
+  RoomAddMessageOutput
 }

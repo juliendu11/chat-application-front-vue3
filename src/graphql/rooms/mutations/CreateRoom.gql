@@ -1,7 +1,7 @@
 #import "../fragments/Room.gql"
 
-mutation createRoom($createRoomInput: CreateRoomInput!) {
-  createRoom(createRoomInput: $createRoomInput) {
+mutation roomCreate($roomCreateInput: RoomCreateInput!) {
+  roomCreate(roomCreateInput: $roomCreateInput) {
    message
     result
     value {

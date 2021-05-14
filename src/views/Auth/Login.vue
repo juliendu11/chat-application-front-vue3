@@ -56,7 +56,7 @@ import { showErrorSwal } from '@/services/swal.service'
 import { useRouter } from 'vue-router'
 
 import Login from '@/graphql/member/mutations/Login.gql'
-import { LoginMemberOutput, LoginMemberInput } from '@/types/graphql/member/Login'
+import { MemberLoginInput, MemberLoginOutput } from '@/types/graphql/member/Login'
 import { useMutation } from '@vue/apollo-composable'
 import { setToken } from '../../services/token.service'
 
@@ -79,7 +79,7 @@ export default defineComponent({
       state
     )
 
-    const { mutate } = useMutation<LoginMemberOutput, LoginMemberInput>(Login)
+    const { mutate } = useMutation<MemberLoginOutput, MemberLoginInput>(Login)
 
     const onSubmitForm = async () => {
       try {
@@ -89,7 +89,7 @@ export default defineComponent({
         state.loading = true
 
         const { data } = await mutate({
-          loginMemberInput: {
+          memberLoginInput: {
             id: state.id,
             password: state.password
           }
@@ -99,12 +99,12 @@ export default defineComponent({
           throw new Error('Unable to get data')
         }
 
-        if (!data.login.result) {
-          showErrorSwal(data.login.message)
+        if (!data.memberLogin.result) {
+          showErrorSwal(data.memberLogin.message)
           return
         }
 
-        setToken(data.login.token)
+        setToken(data.memberLogin.token)
         router.push('/')
       } catch (error) {
         showErrorSwal(error.message)

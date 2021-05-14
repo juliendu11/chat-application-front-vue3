@@ -1,14 +1,14 @@
 import MessageItem from '../../MessageItem'
 
-type RoomMessageInput = {
-    getRoomMessageInput: {
+type RoomGetMessageInput = {
+    roomGetMessageInput: {
         id: string
         limit: number
         skip: number
     }
 }
 
-type RoomMessageOuput = {
+type RoomGetMessageOutput = {
     roomMessage: {
         result: boolean,
         message: string
@@ -21,6 +21,6 @@ type RoomMessageOuput = {
 }
 
 export {
-  RoomMessageInput,
-  RoomMessageOuput
+  RoomGetMessageInput,
+  RoomGetMessageOutput
 }

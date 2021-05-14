@@ -1,17 +1,17 @@
-type ForgotPasswordInput = {
-    forgotPasswordInput: {
+type MemberForgotPasswordInput = {
+    memberForgotPasswordInput: {
         email: string
     }
 }
 
-type ForgotPasswordOutput = {
-    forgotPassword: {
+type MemberForgotPasswordOutput = {
+    memberForgotPassword: {
         message: string
         result: boolean
     }
 }
 
 export {
-  ForgotPasswordInput,
-  ForgotPasswordOutput
+  MemberForgotPasswordInput,
+  MemberForgotPasswordOutput
 }

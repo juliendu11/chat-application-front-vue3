@@ -27,7 +27,7 @@ import { useMutation } from '@vue/apollo-composable'
 
 import CreateRoom from '@/graphql/rooms/mutations/CreateRoom.gql'
 
-import { CreateRoomInput, CreateRoomOutput } from '@/types/graphql/rooms/CreateRoom'
+import { RoomCreateInput, RoomCreateOutput } from '@/types/graphql/rooms/CreateRoom'
 import { showErrorSwal, showSuccessSwal } from '../../services/swal.service'
 
 export default defineComponent({
@@ -60,7 +60,7 @@ export default defineComponent({
       return errors
     })
 
-    const { mutate } = useMutation<CreateRoomOutput, CreateRoomInput>(CreateRoom)
+    const { mutate } = useMutation<RoomCreateOutput, RoomCreateInput>(CreateRoom)
 
     const onClickAddNewRoom = async () => {
       try {
@@ -70,7 +70,7 @@ export default defineComponent({
         state.loading = true
 
         const { data } = await mutate({
-          createRoomInput: {
+          roomCreateInput: {
             name: state.name,
             isPrivate: state.isPrivate
           }
@@ -80,8 +80,8 @@ export default defineComponent({
           throw new Error('Unable to get data')
         }
 
-        if (!data.createRoom.result) {
-          showErrorSwal(data.createRoom.message)
+        if (!data.roomCreate.result) {
+          showErrorSwal(data.roomCreate.message)
           return
         }
 

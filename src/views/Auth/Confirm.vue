@@ -22,8 +22,8 @@ import { useRoute, useRouter } from 'vue-router'
 
 import ConfirmAccount from '@/graphql/member/mutations/ConfirmAccount.gql'
 import {
-  ConfirmAccountInput,
-  ConfirmAccountOutput
+  MemberConfirmMemberInput,
+  MemberConfirmMemberOutput
 } from '@/types/graphql/member/ConfirmAccount'
 import { useMutation } from '@vue/apollo-composable'
 
@@ -66,14 +66,14 @@ export default defineComponent({
       state.message = message
     }
 
-    const { mutate } = useMutation<ConfirmAccountOutput, ConfirmAccountInput>(ConfirmAccount)
+    const { mutate } = useMutation<MemberConfirmMemberOutput, MemberConfirmMemberInput>(ConfirmAccount)
 
     const onSubmitForm = async () => {
       try {
         state.loading = true
 
         const { data } = await mutate({
-          confirmAccountInput: {
+          memberConfirmAccountInput: {
             email: state.email,
             token: state.token
           }
@@ -83,11 +83,11 @@ export default defineComponent({
           throw new Error('Unable to get data')
         }
 
-        if (!data.confirmAccount.result) {
-          showErrorMessage(data.confirmAccount.message)
+        if (!data.memberConfirmAccount.result) {
+          showErrorMessage(data.memberConfirmAccount.message)
           return
         }
-        showSuccessMessage(data.confirmAccount.message)
+        showSuccessMessage(data.memberConfirmAccount.message)
       } catch (error) {
         showErrorMessage(error.message)
       } finally {

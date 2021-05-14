@@ -61,7 +61,7 @@ import { useMutation } from '@vue/apollo-composable'
 
 import Register from '@/graphql/member/mutations/Register.gql'
 
-import { RegisterMemberInput, RegisterMemberOutput } from '@/types/graphql/member/Register'
+import { MemberRegisterInput, MemberRegisterOutput } from '@/types/graphql/member/Register'
 
 export default defineComponent({
   name: 'Register',
@@ -83,7 +83,7 @@ export default defineComponent({
       state
     )
 
-    const { mutate } = useMutation<RegisterMemberOutput, RegisterMemberInput>(Register)
+    const { mutate } = useMutation<MemberRegisterOutput, MemberRegisterInput>(Register)
 
     const onSubmitForm = async () => {
       try {
@@ -93,7 +93,7 @@ export default defineComponent({
         state.loading = true
 
         const { data } = await mutate({
-          registerMemberInput: {
+          memberRegisterMemberInput: {
             email: state.email,
             password: state.password,
             username: state.username
@@ -104,12 +104,12 @@ export default defineComponent({
           throw new Error('Unable to get data')
         }
 
-        if (!data.register.result) {
-          showErrorSwal(data.register.message)
+        if (!data.memberRegister.result) {
+          showErrorSwal(data.memberRegister.message)
           return
         }
 
-        showSuccessSwal(data.register.message)
+        showSuccessSwal(data.memberRegister.message)
       } catch (error) {
         showErrorSwal(error.message)
       } finally {

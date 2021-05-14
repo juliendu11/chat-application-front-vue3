@@ -1,14 +1,14 @@
 import { Room } from '../Items'
 
-type CreateRoomInput = {
-    createRoomInput:{
+type RoomCreateInput = {
+    roomCreateInput:{
         name:string
         isPrivate:boolean
     }
 }
 
-type CreateRoomOutput = {
-    createRoom:{
+type RoomCreateOutput = {
+    roomCreate:{
         message:string
         result:boolean
         value:Room
@@ -16,6 +16,6 @@ type CreateRoomOutput = {
 }
 
 export {
-  CreateRoomInput,
-  CreateRoomOutput
+  RoomCreateInput,
+  RoomCreateOutput
 }

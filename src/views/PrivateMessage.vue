@@ -95,7 +95,7 @@ export default defineComponent({
 
     const getFetchInformation = ():ConversationMessageInput => {
       return {
-        getConversationMessageInput: {
+        conversationMessageInput: {
           id: conversationIdSelected.value,
           skip: message.skip,
           limit: message.limit
@@ -199,7 +199,7 @@ export default defineComponent({
       message.page += 1
       message.skip = message.limit * message.page - message.limit
       await refetch({
-        getConversationMessageInput: {
+        conversationMessageInput: {
           id: conversationIdSelected.value,
           skip: message.skip,
           limit: message.limit

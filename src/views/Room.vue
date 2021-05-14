@@ -35,8 +35,8 @@ import { debounce } from 'ts-debounce'
 
 import AddRoomMessage from '@/graphql/rooms/mutations/AddRoomMessage.gql'
 import RoomMessages from '@/graphql/rooms/queries/RoomMessages.gql'
-import { AddRoomMessageInput, AddRoomMessageOuput } from '@/types/graphql/rooms/AddRoomMessage'
-import { RoomMessageInput, RoomMessageOuput } from '@/types/graphql/rooms/RoomMessage'
+import { RoomAddMessageInput, RoomAddMessageOutput } from '@/types/graphql/rooms/AddRoomMessage'
+import { RoomGetMessageInput, RoomGetMessageOutput } from '@/types/graphql/rooms/RoomMessage'
 import { MessageReactive } from '@/types/reactive/Room'
 
 import { showErrorSwal } from '../services/swal.service'
@@ -93,9 +93,9 @@ export default defineComponent({
       roomIdSelected.value = store.room.getIdSelected()
     }
 
-    const getFetchInformation = ():RoomMessageInput => {
+    const getFetchInformation = ():RoomGetMessageInput => {
       return {
-        getRoomMessageInput: {
+        roomGetMessageInput: {
           id: roomIdSelected.value,
           skip: message.skip,
           limit: message.limit
@@ -127,7 +127,7 @@ export default defineComponent({
       })
     })
 
-    const { onResult, refetch } = useQuery<RoomMessageOuput, RoomMessageInput>(RoomMessages, getFetchInformation())
+    const { onResult, refetch } = useQuery<RoomGetMessageOutput, RoomGetMessageInput>(RoomMessages, getFetchInformation())
 
     onResult(({ data }) => {
       if (data.roomMessage.result) {
@@ -142,7 +142,7 @@ export default defineComponent({
       return myId === id
     }
 
-    const { mutate } = useMutation<AddRoomMessageOuput, AddRoomMessageInput>(AddRoomMessage)
+    const { mutate } = useMutation<RoomAddMessageOutput, RoomAddMessageInput>(AddRoomMessage)
 
     const onSubmitForm = async () => {
       try {
@@ -152,7 +152,7 @@ export default defineComponent({
         form.loading = true
 
         const { data } = await mutate({
-          addRoomMessageInput: {
+          roomAddMessageInput: {
             id: store.room.getIdSelected(),
             message: form.message
           }
@@ -162,8 +162,8 @@ export default defineComponent({
           throw new Error('Unable to get data')
         }
 
-        if (!data.addRoomMessage.result) {
-          showErrorSwal(data.addRoomMessage.message)
+        if (!data.roomAddMessage.result) {
+          showErrorSwal(data.roomAddMessage.message)
           return
         }
       } catch (error) {
@@ -199,7 +199,7 @@ export default defineComponent({
       message.page += 1
       message.skip = message.limit * message.page - message.limit
       await refetch({
-        getRoomMessageInput: {
+        roomGetMessageInput: {
           id: roomIdSelected.value,
           skip: message.skip,
           limit: message.limit

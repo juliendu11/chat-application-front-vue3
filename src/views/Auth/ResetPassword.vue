@@ -50,7 +50,7 @@ import { showErrorSwal, showSuccessSwal } from '@/services/swal.service'
 import { useRoute, useRouter } from 'vue-router'
 
 import ResetPassword from '@/graphql/member/mutations/ResetPassword.gql'
-import { ResetPasswordInput, ResetPasswordOutput } from '@/types/graphql/member/ResetPassword'
+import { MemberForgotPasswordInput, MemberForgotPasswordOutput } from '@/types/graphql/member/ResetPassword'
 import { useMutation } from '@vue/apollo-composable'
 
 export default defineComponent({
@@ -84,7 +84,7 @@ export default defineComponent({
       state
     )
 
-    const { mutate } = useMutation<ResetPasswordOutput, ResetPasswordInput>(ResetPassword)
+    const { mutate } = useMutation<MemberForgotPasswordOutput, MemberForgotPasswordInput>(ResetPassword)
 
     const onSubmitForm = async () => {
       try {
@@ -94,7 +94,7 @@ export default defineComponent({
         state.loading = true
 
         const { data } = await mutate({
-          resetPasswordInput: {
+          memberForgotPasswordInput: {
             email: state.email,
             newPassword: state.repassword,
             token: state.token
@@ -105,11 +105,11 @@ export default defineComponent({
           throw new Error('Unable to get data')
         }
 
-        if (!data.resetPassword.result) {
-          showErrorSwal(data.resetPassword.message)
+        if (!data.memberForgotPassword.result) {
+          showErrorSwal(data.memberForgotPassword.message)
           return
         }
-        showSuccessSwal(data.resetPassword.message)
+        showSuccessSwal(data.memberForgotPassword.message)
       } catch (error) {
         showErrorSwal(error.message)
       } finally {

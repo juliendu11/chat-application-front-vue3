@@ -1,6 +1,6 @@
 
-mutation login($loginMemberInput: LoginMemberInput!) {
-  login(loginMemberInput: $loginMemberInput) {
+mutation memberLogin($memberLoginInput: MemberLoginInput!) {
+  memberLogin(memberLoginInput: $memberLoginInput) {
     message
     result
     token

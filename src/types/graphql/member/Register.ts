@@ -1,5 +1,5 @@
-type RegisterMemberInput= {
-    registerMemberInput:{
+type MemberRegisterInput= {
+    memberRegisterMemberInput:{
         email: string
         password: string
         username: string
@@ -7,14 +7,14 @@ type RegisterMemberInput= {
 
 }
 
-type RegisterMemberOutput = {
-    register:{
+type MemberRegisterOutput = {
+    memberRegister:{
         result:boolean,
         message:string
     }
 }
 
 export {
-  RegisterMemberInput,
-  RegisterMemberOutput
+  MemberRegisterInput,
+  MemberRegisterOutput
 }

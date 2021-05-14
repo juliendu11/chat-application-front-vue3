@@ -1,19 +1,19 @@
-type ResetPasswordInput = {
-    resetPasswordInput: {
+type MemberForgotPasswordInput = {
+    memberForgotPasswordInput: {
         email: string
 newPassword: string
 token: string
     }
 }
 
-type ResetPasswordOutput = {
-    resetPassword: {
+type MemberForgotPasswordOutput = {
+    memberForgotPassword: {
         message: string
         result: boolean
     }
 }
 
 export {
-  ResetPasswordInput,
-  ResetPasswordOutput
+  MemberForgotPasswordInput,
+  MemberForgotPasswordOutput
 }

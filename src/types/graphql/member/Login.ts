@@ -1,12 +1,12 @@
-type LoginMemberInput = {
-    loginMemberInput:{
+type MemberLoginInput = {
+    memberLoginInput:{
         id: string
 password: string
     }
 }
 
-type LoginMemberOutput = {
-    login:{
+type MemberLoginOutput = {
+    memberLogin:{
         result:boolean
         message:string
         token:string
@@ -14,6 +14,6 @@ type LoginMemberOutput = {
 }
 
 export {
-  LoginMemberOutput,
-  LoginMemberInput
+  MemberLoginInput,
+  MemberLoginOutput
 }

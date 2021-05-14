@@ -1,7 +1,7 @@
 #import "../../fragments/Message.gql"
 
-query roomMessage($getRoomMessageInput: GetRoomMessageInput!) {
-  roomMessage(getRoomMessageInput: $getRoomMessageInput) {
+query roomMessage($roomGetMessageInput: RoomGetMessageInput!) {
+  roomMessage(roomGetMessageInput: $roomGetMessageInput) {
     result
     message
     value {

@@ -1,6 +1,6 @@
 
-mutation addRoomMessage($addRoomMessageInput: AddRoomMessageInput!) {
-  addRoomMessage(addRoomMessageInput: $addRoomMessageInput) {
+mutation roomAddMessage($roomAddMessageInput: RoomAddMessageInput!) {
+  roomAddMessage(roomAddMessageInput: $roomAddMessageInput) {
    message
   result
   }

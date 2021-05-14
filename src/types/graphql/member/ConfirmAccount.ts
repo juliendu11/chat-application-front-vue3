@@ -1,18 +1,18 @@
-type ConfirmAccountInput = {
-    confirmAccountInput: {
+type MemberConfirmMemberInput = {
+    memberConfirmAccountInput: {
         email: string
         token: string
     }
 }
 
-type ConfirmAccountOutput = {
-    confirmAccount: {
+type MemberConfirmMemberOutput = {
+    memberConfirmAccount: {
         message: string
         result: boolean
     }
 }
 
 export {
-  ConfirmAccountInput,
-  ConfirmAccountOutput
+  MemberConfirmMemberInput,
+  MemberConfirmMemberOutput
 }

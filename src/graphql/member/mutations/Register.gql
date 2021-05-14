@@ -1,6 +1,6 @@
 
-mutation register($registerMemberInput: RegisterMemberInput!) {
-  register(registerMemberInput: $registerMemberInput) {
+mutation memberRegister($memberRegisterMemberInput: MemberRegisterInput!) {
+  memberRegister(memberRegisterMemberInput: $memberRegisterMemberInput) {
     message
     result
   }
