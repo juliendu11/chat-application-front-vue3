@@ -220,7 +220,7 @@ export default defineComponent({
           val.conversationNewMessage.last_message
       }
 
-      if (store.room.getIdSelected()) {
+      if (store.conversation.getIdSelected()) {
         // Update conversation query
         mitt.conversationMessageAdded.emit(
           val.conversationNewMessage.last_message
