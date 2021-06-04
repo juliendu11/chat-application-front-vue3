@@ -17,8 +17,6 @@ import { getToken, setToken, deleteToken } from '../services/token.service'
 import MemberRefreshToken from '../graphql/member/queries/RefreshToken.gql'
 import { MemberRefreshTokenOutput } from '../types/graphql/member/MemberRefreshToken'
 
-import router from '../router'
-
 const wsLink = new WebSocketLink({
   uri: 'ws://localhost:3000/graphql',
   options: {
@@ -73,10 +71,10 @@ const errorHandler = onError(
               setToken(data.memberRefreshToken.newToken)
               return data.memberRefreshToken.newToken
             })
-            .catch(error => {
+            .catch(() => {
               // Handle token refresh errors e.g clear stored tokens, redirect to login, ...
               deleteToken()
-              router.push('/')
+              location.reload()
             })
         )
           .filter(value => Boolean(value))
