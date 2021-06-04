@@ -1,0 +1,8 @@
+
+query memberRefreshToken {
+  memberRefreshToken {
+    message
+    newToken
+    result
+  }
+}
