@@ -3,8 +3,8 @@
       <Logo class="header__logo" @click="onClickHome"/>
       <nav class="nav">
         <ul>
-          <li :class="{'active':$route.name === 'Home'}"><a href="#" @click.prevent="onClickChangePage('conversation')">Conversation</a></li>
-          <li :class="{'active':$route.name === 'Contacts'}"><a href="#" @click.prevent="onClickChangePage('contacts')">Contacts</a></li>
+          <li @click.prevent="onClickChangePage('conversation')" :class="{'active':$route.name === 'Home'}"><a href="#">Conversation</a></li>
+          <li  @click.prevent="onClickChangePage('contacts')" :class="{'active':$route.name === 'Contacts'}"><a href="#">Contacts</a></li>
         </ul>
       </nav>
       <UserPic :username="username" :image="profilPic" @click="onClickOpenProfil"/>
