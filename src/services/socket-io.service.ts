@@ -1,8 +1,0 @@
-
-const createClient = () => {
-
-}
-
-export {
-  createClient
-}

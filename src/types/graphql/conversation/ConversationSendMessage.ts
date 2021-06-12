@@ -1,7 +1,8 @@
 export type ConversationSendMessageInput = {
     conversationSendMessageInput: {
         memberId: string
-        message: string
+        message: string|null
+        media: File|null
     }
 }
 
