@@ -49,7 +49,7 @@ export default defineComponent({
     },
     errors: {
       type: Object as PropType<string[]>,
-      default: []
+      default: () => null
     }
   }
 })

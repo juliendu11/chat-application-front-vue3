@@ -3,7 +3,6 @@
       <Logo class="header__logo" @click="onClickHome"/>
       <nav class="nav">
         <ul>
-          <li @click.prevent="onClickChangePage('conversation')" :class="{'active':$route.name === 'Home'}"><a href="#">Conversation</a></li>
           <li  @click.prevent="onClickChangePage('contacts')" :class="{'active':$route.name === 'Contacts'}"><a href="#">Contacts</a></li>
         </ul>
       </nav>
