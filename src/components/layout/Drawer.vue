@@ -229,7 +229,17 @@ export default defineComponent({
 
       // If is not me
       if (val.conversationNewMessage.last_message.user._id !== store.member.getId()) {
-        toast.info(`${val.conversationNewMessage.last_message.user.username}: ${val.conversationNewMessage.last_message.message}`)
+        let message = `${val.conversationNewMessage.last_message.user.username}: `
+
+        if (val.conversationNewMessage.last_message.message && val.conversationNewMessage.last_message.medias.length !== 0) {
+          message += `${val.conversationNewMessage.last_message.message} +${val.conversationNewMessage.last_message.medias.length} medias`
+        } else if (!val.conversationNewMessage.last_message.message && val.conversationNewMessage.last_message.medias.length !== 0) {
+          message += `${val.conversationNewMessage.last_message.medias.length} medias`
+        } else if (val.conversationNewMessage.last_message.message && val.conversationNewMessage.last_message.medias.length === 0) {
+          message += `${val.conversationNewMessage.last_message.message}`
+        }
+
+        toast.info(message)
       }
 
       client.writeQuery({
