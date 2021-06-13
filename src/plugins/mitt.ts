@@ -1,10 +1,10 @@
 import { App, inject } from 'vue'
 import mitt, { Emitter } from 'mitt'
-import MittPlugin, { ConversationMessageAddedCallback, DialogContainerCallBack, MemberOnlineStatusChangedCallback, RightDrawerCallBack, RoomMessageAddedCallback } from '@/types/plugins/Mitt'
+import MittPlugin, { ConversationMessageAddedCallback, DialogContainerCallBack, LightBoxCallback, MemberOnlineStatusChangedCallback, RightDrawerCallBack, RoomMessageAddedCallback } from '@/types/plugins/Mitt'
 import DialogContainerArgs from '@/types/emitted/DialogContainerArgs'
 import MessageItem from '../types/MessageItem'
-import { Member } from '@/types/graphql/Items'
 import MemberOnlineStatusChangedArgs from '@/types/emitted/MemberOnlineStatusChangedArgs'
+import { MediaSelected } from '@/types/MediaSelected'
 
 export const emitter = mitt()
 
@@ -15,6 +15,7 @@ export const RIGHT_DRAWER_EMITTER = 'right-drawer'
 export const ROOM_MESSAGE_ADDED_EMITTER = 'room-message-added'
 export const CONVERSATION_MESSAGE_ADDED_EMITTER = 'conversation-message-added'
 export const MEMBER_ONLINE_STATUS_CHANGED = 'member-online-status-changed'
+export const LIGHT_BOX = 'light-box'
 
 export function useMitt (): MittPlugin {
   const mitt = inject(MittSymbol)
@@ -42,6 +43,10 @@ export function useMitt (): MittPlugin {
     memberOnlineStatusChanged: {
       emit: (args:MemberOnlineStatusChangedArgs) => { (mitt as Emitter).emit(MEMBER_ONLINE_STATUS_CHANGED, args) },
       listen: (handler: MemberOnlineStatusChangedCallback) => { (mitt as Emitter).on(MEMBER_ONLINE_STATUS_CHANGED, (n) => handler(n)) }
+    },
+    showLightBox: {
+      emit: (args:MediaSelected) => { (mitt as Emitter).emit(LIGHT_BOX, args) },
+      listen: (handler: LightBoxCallback) => { (mitt as Emitter).on(LIGHT_BOX, (n) => handler) }
     }
   }
 }

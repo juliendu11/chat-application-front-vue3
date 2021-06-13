@@ -3,7 +3,7 @@
     <div class="tchat__header">
       <h3>{{ $route.params.name }}</h3>
     </div>
-    <perfect-scrollbar id="scrollBar" @ps-y-reach-start="onScrollUp">
+    <perfect-scrollbar id="scrollBar" :class="{'ps--grow':mediasSelected.length !== 0}" @ps-y-reach-start="onScrollUp">
       <div class="tchat__content">
         <MessageItem
           v-for="(message, z) in messagesReversed"
@@ -13,24 +13,18 @@
         />
       </div>
     </perfect-scrollbar>
-    <div class="tchat__footer">
+    <div class="tchat__footer" :class="{'tchat__footer--grow':mediasSelected.length !== 0}">
       <form @submit.prevent="onSubmitForm">
         <input
           id="tchatFileInput"
           type="file"
           hidden
           accept="video/*,image/*"
+          multiple
           @change="onAddFiles"
         />
         <div class="tchat__files-selected-zone">
-          <div
-            class="file-selected"
-            v-for="(file, i) in mediasSelected"
-            :key="i"
-          >
-            <img v-if="file.type === 'image'" :src="file.src" :title="file.title" height="80" width="80" />
-            <video v-else :src="file.src" :title="file.title" height="80px" width="80px"/>
-          </div>
+          <FileSelected v-for="(file, i) in mediasSelected" :key="i" :file="file" @on-delete="onDeleteFileSelected"/>
         </div>
         <textarea placeholder="Type your message here" v-model="form.message" />
         <div class="tchat__footer-btn">
@@ -58,8 +52,6 @@ import {
   ref
 } from 'vue'
 import { useMutation, useQuery } from '@vue/apollo-composable'
-import { useVuelidate } from '@vuelidate/core'
-import { required } from '@vuelidate/validators'
 import { onBeforeRouteUpdate } from 'vue-router'
 import { debounce } from 'ts-debounce'
 
@@ -82,11 +74,12 @@ import { showErrorSwal } from '../services/swal.service'
 import { useStore } from '../store/Store'
 
 import MessageItem from '@/components/MessageItem.vue'
+import FileSelected from '@/components/FileSelected.vue'
 import { useMitt } from '../plugins/mitt'
 
 export default defineComponent({
   name: 'PrivateMessage',
-  components: { MessageItem },
+  components: { MessageItem, FileSelected },
   setup () {
     const store = useStore()
     const mitt = useMitt()
@@ -99,7 +92,7 @@ export default defineComponent({
     const form = reactive<FormReactive>({
       message: '',
       loading: false,
-      media: null
+      medias: []
     })
 
     const message = reactive<MessageReactive>({
@@ -123,13 +116,6 @@ export default defineComponent({
     const messagesReversed = computed(() => {
       return message.values.slice().reverse()
     })
-
-    const v$ = useVuelidate(
-      {
-        message: { required }
-      },
-      form
-    )
 
     const loadRoomInformation = () => {
       conversationIdSelected.value = store.conversation.getIdSelected()
@@ -199,16 +185,19 @@ export default defineComponent({
 
     const onSubmitForm = async () => {
       try {
-        const isFormCorrect = await v$.value.$validate()
-        if (!isFormCorrect) return
+        if (!form.message && mediasSelected.value.length === 0) return
 
         form.loading = true
+
+        if (mediasSelected.value.length !== 0) {
+          form.medias = mediasSelected.value.map(x => x.media)
+        }
 
         const { data } = await mutate({
           conversationSendMessageInput: {
             memberId: store.conversation.getMemberIdSelected(),
             message: form.message,
-            media: form.media
+            medias: form.medias
           }
         })
 
@@ -220,11 +209,19 @@ export default defineComponent({
           showErrorSwal(data.conversationSendMessage.message)
           return
         }
+
+        resetForm()
       } catch (error) {
         showErrorSwal(error.message)
       } finally {
         form.loading = false
       }
+    }
+
+    const resetForm = () => {
+      form.message = ''
+      form.medias = []
+      mediasSelected.value = []
     }
 
     const onClickUploadFile = () => {
@@ -235,12 +232,9 @@ export default defineComponent({
     }
 
     const onAddFiles = (e: any) => {
-      console.log(e)
-      const file = (e.target.files as FileList).item(0)
-      if (!file) return
-      form.media = file as File
-
-      loadMediaSelected(file)
+      Array.from(e.target.files as FileList).forEach((file) => {
+        loadMediaSelected(file)
+      })
     }
 
     const autoScrollToBottomUp = () => {
@@ -278,15 +272,19 @@ export default defineComponent({
       var reader = new FileReader()
 
       reader.onload = function (event:any) {
-        console.log(file.type)
         mediasSelected.value.push({
           title: file.name,
           type: file.type.includes('image') ? 'image' : 'video',
-          src: event.target.result as string
+          src: event.target.result as string,
+          media: file
         })
       }
 
       reader.readAsDataURL(file)
+    }
+
+    const onDeleteFileSelected = (name:string) => {
+      mediasSelected.value = mediasSelected.value.filter(x => x.title !== name)
     }
 
     return {
@@ -298,7 +296,8 @@ export default defineComponent({
       isMe,
       messagesReversed,
       onScrollUp,
-      mediasSelected
+      mediasSelected,
+      onDeleteFileSelected
     }
   }
 })

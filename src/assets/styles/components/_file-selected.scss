@@ -1,0 +1,28 @@
+.file-selected{
+    height: 80px;
+    width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    img, video {
+        border-radius: 50%;
+        height: 100%;
+        width: 100%;
+        cursor: pointer;
+    }
+
+    .btn {
+        position: absolute;
+        right: -8px;
+        top: -8px;
+
+        border-radius: 50%;
+
+        padding: 0.8rem;
+        font-size: 18px;
+
+        z-index: 10;
+    }
+}

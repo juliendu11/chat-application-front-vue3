@@ -41,7 +41,6 @@ import Header from '@/components/layout/Header.vue'
 import DialogWrapper from '@/components/DialogWrapper.vue'
 import { useStore } from '../store/Store'
 
-import MyMemberInfo from '@/types/MyMemberInfo'
 import { useMitt } from '@/plugins/mitt'
 
 export default defineComponent({

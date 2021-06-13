@@ -2,7 +2,7 @@ export type ConversationSendMessageInput = {
     conversationSendMessageInput: {
         memberId: string
         message: string|null
-        media: File|null
+        medias: File[]
     }
 }
 

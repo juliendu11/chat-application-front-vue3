@@ -1,6 +1,10 @@
 fragment messageField on Message {
   date
   message
+  medias{
+    path
+    type
+  }
   user {
       _id
       username

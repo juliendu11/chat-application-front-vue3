@@ -1,13 +1,14 @@
 import DialogContainerArgs from '../emitted/DialogContainerArgs'
 import MemberOnlineStatusChangedArgs from '../emitted/MemberOnlineStatusChangedArgs'
-import { Member } from '../graphql/Items'
+import { MediaSelected } from '../MediaSelected'
 import MessageItem from '../MessageItem'
 
 export type DialogContainerCallBack = (args: DialogContainerArgs) => any;
 export type RightDrawerCallBack = () => any;
 export type RoomMessageAddedCallback = (message:MessageItem) => any;
 export type ConversationMessageAddedCallback = (message:MessageItem) => any;
-export type MemberOnlineStatusChangedCallback = (args:MemberOnlineStatusChangedArgs) => any;
+export type MemberOnlineStatusChangedCallback = (args: MemberOnlineStatusChangedArgs) => any;
+export type LightBoxCallback = () => any;
 
 type Mitt = {
     dialogContainer:{
@@ -29,6 +30,10 @@ type Mitt = {
     memberOnlineStatusChanged:{
         emit:(args:MemberOnlineStatusChangedArgs) => void,
         listen: (handler: MemberOnlineStatusChangedCallback) =>void
+    },
+    showLightBox: {
+        emit: (args:MediaSelected) => void,
+        listen: (handler: LightBoxCallback) =>void
     }
 }
 
