@@ -1,6 +1,10 @@
 subscription {
   conversationNewMessage {
     last_message {
+      medias {
+        path
+        type
+      }
       message
       date
       user {
