@@ -4,6 +4,8 @@ import Home from '../views/Home.vue'
 
 import AuthRoutes from './auth'
 
+import { store } from '../store/Store'
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -37,6 +39,20 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  const conversationSelected = store.conversation.getMemberUsernameSelected()
+  if (conversationSelected) {
+    if (to.name !== 'Message' || !to.params.username || to.params.username !== conversationSelected) {
+      store.conversation.clear()
+    }
+  }
+
+  const roomSelected = store.room.getNameSelected()
+  if (roomSelected) {
+    if (to.name !== 'Room' || !to.params.name || to.params.name !== roomSelected) {
+      store.room.clear()
+    }
+  }
+
   if (to.meta.clientAuth && !hasToken()) {
     next('/login')
   }

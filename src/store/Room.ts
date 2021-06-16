@@ -20,6 +20,11 @@ export class Room implements IStore<Room> {
       return this.roomNameSelected
     }
 
+    clear () {
+      this.roomIdSelected = ''
+      this.roomNameSelected = ''
+    }
+
     init (data:Room):void {
       this.roomIdSelected = data.roomIdSelected
       this.roomNameSelected = data.roomNameSelected

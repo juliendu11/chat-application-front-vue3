@@ -2,7 +2,8 @@ import IStore from './IStore'
 
 export class Conversation implements IStore<Conversation> {
     private conversationIdSelected =''
-    private conversationMemberIdIdSelected =''
+    private conversationMemberIdSelected =''
+    private conversationMemberUsernameSelected =''
 
     updateIdSelected (conversationIdSelected:string):void {
       this.conversationIdSelected = conversationIdSelected
@@ -13,16 +14,31 @@ export class Conversation implements IStore<Conversation> {
     }
 
     updateMemberIdSelected (conversationMemberIdIdSelected:string):void {
-      this.conversationMemberIdIdSelected = conversationMemberIdIdSelected
+      this.conversationMemberIdSelected = conversationMemberIdIdSelected
     }
 
     getMemberIdSelected ():string {
-      return this.conversationMemberIdIdSelected
+      return this.conversationMemberIdSelected
+    }
+
+    updateUsernameSelected (conversationMemberUsernameSelected:string):void {
+      this.conversationMemberUsernameSelected = conversationMemberUsernameSelected
+    }
+
+    getMemberUsernameSelected ():string {
+      return this.conversationMemberUsernameSelected
     }
 
     init (data:Conversation):void {
       this.conversationIdSelected = data.conversationIdSelected
-      this.conversationMemberIdIdSelected = data.conversationMemberIdIdSelected
+      this.conversationMemberIdSelected = data.conversationMemberIdSelected
+      this.conversationMemberUsernameSelected = data.conversationMemberUsernameSelected
+    }
+
+    clear () {
+      this.conversationIdSelected = ''
+      this.conversationMemberIdSelected = ''
+      this.conversationMemberUsernameSelected = ''
     }
 
     getData ():Conversation {

@@ -13,6 +13,8 @@ type MessageItem = {
   };
   message: string;
   medias: MessageMediaItem[];
+  isNew: boolean
+  isView:boolean
 };
 
 export default MessageItem

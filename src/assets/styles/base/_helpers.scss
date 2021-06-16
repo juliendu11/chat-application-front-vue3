@@ -6,6 +6,10 @@
     @include theme-aware("color", "color-gray2");
 }
 
+.font-weight-bold {
+   font-weight: bold;
+}
+
 .disabled {
     pointer-events: none;
     cursor: default;

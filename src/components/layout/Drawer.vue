@@ -31,7 +31,7 @@
             <div class="conversation-item__header">
               <span>{{ room.name }}</span>
             </div>
-            <div class="conversation-item__content">
+            <div class="conversation-item__content" :class="{'conversation-item__content--new-msg':roomIdsNewMessage.find(x=>x == room._id)}">
               <span>{{
                 room.last_message ? room.last_message.user.username : room.name
               }}</span>
@@ -73,7 +73,7 @@
             />
             <i class="fa fa-circle" aria-hidden="true"></i>
           </div>
-          <div class="conversation-item__content">
+          <div class="conversation-item__content" :class="{'conversation-item__content--new-msg':pmIdsNewMessage.find(x=>x == conversation._id)}">
             <span>{{ getOtherMember(conversation.members).username }}</span>
             <p>
               {{ conversation.last_message.message }}
@@ -141,6 +141,9 @@ export default defineComponent({
     const { resolveClient } = useApolloClient()
     const client = resolveClient()
 
+    const roomIdsNewMessage = ref<string[]>([])
+    const pmIdsNewMessage = ref<string[]>([])
+
     const selectedTab = ref(0)
 
     const onClickChangeTab = (tab: number) => {
@@ -177,10 +180,11 @@ export default defineComponent({
           correspondingRoom.last_message = val.roomMessageAdded.message
         }
 
-        if (store.room.getIdSelected()) {
-          // Update room query
-          mitt.roomMessageAdded.emit(val.roomMessageAdded.message)
+        if (store.room.getIdSelected() !== val.roomMessageAdded.id) {
+          roomIdsNewMessage.value.push(val.roomMessageAdded.id)
         }
+
+        mitt.roomMessageAdded.emit(val.roomMessageAdded.message)
 
         client.writeQuery({
           query: Rooms,
@@ -220,12 +224,13 @@ export default defineComponent({
           val.conversationNewMessage.last_message
       }
 
-      if (store.conversation.getIdSelected()) {
-        // Update conversation query
-        mitt.conversationMessageAdded.emit(
-          val.conversationNewMessage.last_message
-        )
+      if (store.conversation.getIdSelected() !== val.conversationNewMessage._id) {
+        pmIdsNewMessage.value.push(val.conversationNewMessage._id)
       }
+
+      mitt.conversationMessageAdded.emit(
+        val.conversationNewMessage.last_message
+      )
 
       // If is not me
       if (val.conversationNewMessage.last_message.user._id !== store.member.getId()) {
@@ -258,6 +263,9 @@ export default defineComponent({
     const onClickOpenRoomConversation = (room: Room) => {
       store.room.updateIdSelected(room._id)
       store.room.updateNameSelected(room.name)
+
+      roomIdsNewMessage.value = roomIdsNewMessage.value.filter(x => x !== room._id)
+
       router.push('/rooms/' + room.name)
     }
 
@@ -266,6 +274,9 @@ export default defineComponent({
 
       store.conversation.updateIdSelected(conversation._id)
       store.conversation.updateMemberIdSelected(member._id)
+      store.conversation.updateUsernameSelected(member.username)
+
+      pmIdsNewMessage.value = pmIdsNewMessage.value.filter(x => x !== conversation._id)
 
       router.push('/messages/' + member.username)
     }
@@ -297,7 +308,9 @@ export default defineComponent({
       onClickOpenPrivateConversation,
       onClickAddRoom,
       getOtherMember,
-      isOnline
+      isOnline,
+      pmIdsNewMessage,
+      roomIdsNewMessage
     }
   }
 })

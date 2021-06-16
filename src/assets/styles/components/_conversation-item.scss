@@ -51,6 +51,11 @@
             font-size: 14px;
             @include theme-aware('color', 'color-gray4');
         }
+
+        &--new-msg p{
+            @include theme-aware('color', 'color-dark');
+            font-weight: bold;
+        }
     }
 
     &__extra {
@@ -61,5 +66,4 @@
     &:hover {
         @include theme-aware('background-color', 'color-gray3');
     }
-
 }
