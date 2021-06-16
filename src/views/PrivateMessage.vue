@@ -1,7 +1,7 @@
 <template>
   <div class="tchat">
     <div class="tchat__header">
-      <h3>{{ $route.params.name }}</h3>
+      <h3>{{ $route.params.username }}</h3>
     </div>
     <perfect-scrollbar id="scrollBar" :class="{'ps--grow':mediasSelected.length !== 0}" @ps-y-reach-start="onScrollUp">
       <div class="tchat__content">
@@ -117,7 +117,7 @@ export default defineComponent({
       return message.values.slice().reverse()
     })
 
-    const loadRoomInformation = () => {
+    const loadConversationInformation = () => {
       conversationIdSelected.value = store.conversation.getIdSelected()
     }
 
@@ -140,10 +140,10 @@ export default defineComponent({
       message.values = []
     }
 
-    loadRoomInformation()
+    loadConversationInformation()
 
     onBeforeRouteUpdate(() => {
-      loadRoomInformation()
+      loadConversationInformation()
       whenChangingRoom()
       refetch(getFetchInformation())
     })
