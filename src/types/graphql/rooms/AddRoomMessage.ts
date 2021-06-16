@@ -3,7 +3,8 @@ import RoomMessageItem from '../../RoomMessageItem'
 type RoomAddMessageInput = {
   roomAddMessageInput: {
     id: string
-    message: string
+    message: string|null
+    medias: File[]
   }
 }
 
