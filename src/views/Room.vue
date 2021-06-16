@@ -11,6 +11,9 @@
     <div class="tchat__footer">
       <form @submit.prevent="onSubmitForm">
         <input id="tchatFileInput" type="file" hidden accept="video/*,image/*" @change="onAddFiles">
+         <div class="tchat__files-selected-zone">
+          <FileSelected v-for="(file, i) in mediasSelected" :key="i" :file="file" @on-delete="onDeleteFileSelected"/>
+        </div>
         <textarea placeholder="Type your message here" v-model="form.message"/>
         <div class="tchat__footer-btn">
           <div>

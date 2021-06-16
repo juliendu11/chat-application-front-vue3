@@ -6,6 +6,10 @@ query {
       _id
       last_message {
         date
+        medias{
+          path
+          type
+        }
         message
         user {
           _id

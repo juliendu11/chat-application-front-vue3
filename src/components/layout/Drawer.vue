@@ -37,7 +37,7 @@
               }}</span>
               <p>
                 {{
-                  room.last_message ? room.last_message.message : "Hello there!"
+                  room.last_message ? generateTextPreview(room.last_message.medias.length, room.last_message.message) : "Hello there!"
                 }}
               </p>
             </div>
@@ -76,7 +76,7 @@
           <div class="conversation-item__content" :class="{'conversation-item__content--new-msg':pmIdsNewMessage.find(x=>x == conversation._id)}">
             <span>{{ getOtherMember(conversation.members).username }}</span>
             <p>
-              {{ conversation.last_message.message }}
+              {{ generateTextPreview(conversation.last_message.medias.length, conversation.last_message.message) }}
             </p>
           </div>
           <div class="conversation-item__extra">
@@ -298,6 +298,18 @@ export default defineComponent({
       return member.isOnline
     }
 
+    const generateTextPreview = (numberOfMedias:number, text:string) => {
+      if (numberOfMedias === 0) {
+        return text
+      }
+
+      if (!text) {
+        return `${numberOfMedias} medias`
+      }
+
+      return `${text} +${numberOfMedias} medias`
+    }
+
     return {
       selectedTab,
       onClickChangeTab,
@@ -310,7 +322,8 @@ export default defineComponent({
       getOtherMember,
       isOnline,
       pmIdsNewMessage,
-      roomIdsNewMessage
+      roomIdsNewMessage,
+      generateTextPreview
     }
   }
 })
