@@ -27,7 +27,7 @@
             :key="i"
             @click="onClickOpenRoomConversation(room)"
             :title="room.name"
-            :isNewMessage="roomIdsNewMessage.find(x=>x == room._id)"
+            :isNewMessage="roomIdsNewMessage.some(x=>x == room._id)"
             :from="room.last_message ? room.last_message.user.username : room.name"
             :message="room.last_message ? generateTextPreview(room.last_message.medias.length, room.last_message.message) : 'Hello there!'"
             :date="room.last_message? formatDateFromNow(room.last_message.date): ''"
@@ -45,11 +45,11 @@
             v-for="(conversation, i) in conversations"
             :key="i"
             @click="onClickOpenPrivateConversation(conversation)"
-            :isNewMessage="pmIdsNewMessage.find(x=>x == conversation._id)"
+            :isNewMessage="pmIdsNewMessage.some(x=>x == conversation._id)"
             :from="getOtherMember(conversation.members).username"
             :profilPic="getOtherMember(conversation.members).profilPic"
-            :message="room.last_message ? generateTextPreview(conversation.last_message.medias.length, conversation.last_message.message) :''"
-            :date="room.last_message ? formatDateFromNow(conversation.last_message.date): ''"
+            :message="conversation.last_message ? generateTextPreview(conversation.last_message.medias.length, conversation.last_message.message) :''"
+            :date="conversation.last_message ? formatDateFromNow(conversation.last_message.date): ''"
             />
       </div>
     </div>
