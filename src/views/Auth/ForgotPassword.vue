@@ -6,7 +6,7 @@
     <div class="auth-page__container">
       <h2>Forgot password</h2>
       <div class="auth-page__secondary">
-         <span class="text-muted">Already an account ?</span>
+         <span class="text-muted">Do you remember the password?</span>
         <a href="#" class="btn-link btn-link--primary" @click="onClickLogin">Log in</a>
       </div>
       <form class="form" @submit.prevent="onSubmitForm">
@@ -24,7 +24,7 @@
           :disabled="state.loading"
           :loading="state.loading"
         >
-          Sign in
+          Reset password
         </Button>
       </form>
     </div>

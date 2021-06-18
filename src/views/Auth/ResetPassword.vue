@@ -6,6 +6,7 @@
     <div class="auth-page__container">
       <h2>Reset password</h2>
       <div class="auth-page__secondary">
+          <span class="text-muted">Do you remember the password?</span>
         <a href="#" class="btn-link btn-link--primary" @click="onClickLogin">Log in</a>
       </div>
       <form class="form" @submit.prevent="onSubmitForm">
@@ -20,13 +21,13 @@
           :errors="passwordErrors"
         />
         <FormGroup
-          v-model="state.rePassword"
+          v-model="state.repassword"
           type="password"
           id="password"
           name="password"
-          label="Password"
-          @blur="v$.rePassword.$touch()"
-          @input="v$.rePassword.$touch()"
+          label="Re-password"
+          @blur="v$.repassword.$touch()"
+          @input="v$.repassword.$touch()"
           :errors="rePasswordErrors"
         />
         <Button
@@ -34,7 +35,7 @@
           :disabled="state.loading"
           :loading="state.loading"
         >
-          Sign in
+          Change Password
         </Button>
       </form>
     </div>
@@ -50,7 +51,7 @@ import { showErrorSwal, showSuccessSwal } from '@/services/swal.service'
 import { useRoute, useRouter } from 'vue-router'
 
 import ResetPassword from '@/graphql/member/mutations/ResetPassword.gql'
-import { MemberForgotPasswordInput, MemberForgotPasswordOutput } from '@/types/graphql/member/ResetPassword'
+import { MemberResetPasswordInput, MemberResetPasswordOutput } from '@/types/graphql/member/ResetPassword'
 import { useMutation } from '@vue/apollo-composable'
 
 export default defineComponent({
@@ -84,7 +85,7 @@ export default defineComponent({
       state
     )
 
-    const { mutate } = useMutation<MemberForgotPasswordOutput, MemberForgotPasswordInput>(ResetPassword)
+    const { mutate } = useMutation<MemberResetPasswordOutput, MemberResetPasswordInput>(ResetPassword)
 
     const onSubmitForm = async () => {
       try {
@@ -94,7 +95,7 @@ export default defineComponent({
         state.loading = true
 
         const { data } = await mutate({
-          memberForgotPasswordInput: {
+          memberResetPasswordInput: {
             email: state.email,
             newPassword: state.repassword,
             token: state.token
@@ -105,11 +106,11 @@ export default defineComponent({
           throw new Error('Unable to get data')
         }
 
-        if (!data.memberForgotPassword.result) {
-          showErrorSwal(data.memberForgotPassword.message)
+        if (!data.memberResetPassword.result) {
+          showErrorSwal(data.memberResetPassword.message)
           return
         }
-        showSuccessSwal(data.memberForgotPassword.message)
+        showSuccessSwal(data.memberResetPassword.message)
       } catch (error) {
         showErrorSwal(error.message)
       } finally {

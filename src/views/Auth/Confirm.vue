@@ -4,7 +4,6 @@
       <img src="/logo.png" alt="" />
     </div>
     <div class="auth-page__container">
-      <h2>{{ state.title }}</h2>
       <div v-if="!state.loading">
         <i v-show="!state.error" class="fa fa-check-circle text-success" aria-hidden="true"></i>
         <i v-show="state.error" class="fa fa-ban text-danger" aria-hidden="true"></i>
@@ -18,7 +17,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, reactive } from 'vue'
 
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 
 import ConfirmAccount from '@/graphql/member/mutations/ConfirmAccount.gql'
 import {
