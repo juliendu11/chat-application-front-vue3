@@ -7,10 +7,6 @@
            <FormGroup v-model="state.name" label="Name" id="name" type="text" name="name" @blur="v$.name.$touch()"
           @input="v$.name.$touch()"
           :errors="nameErrors"/>
-          <div class="inline-items mt-2">
-            <span>Is private:</span>
-            <Switch v-model="state.isPrivate" size="sm" label="Is private"/>
-          </div>
         </div>
         <div class="card__actions">
             <Button :disabled="state.loading" type="btn-clean" @click="onClickCancel">Cancel</Button>
