@@ -5,7 +5,7 @@ Frontent with Vue JS 3 with vue-cli + Typescript for a real-time chat applicatio
 <a href="https://github.com/juliendu11/chat-application-back-nestjs">Go to Backend part</a>
 ## Installing
 
-Launch the backend then run this command:
+Launch the frontend then run this command:
 
 ```bash
 $ npm run serve
