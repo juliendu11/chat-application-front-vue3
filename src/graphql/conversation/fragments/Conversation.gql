@@ -1,0 +1,25 @@
+fragment conversationField on ConversationsOutputValue {
+  _id
+  last_message {
+    date
+    medias {
+      path
+      type
+    }
+    message
+    user {
+      _id
+      username
+      email
+      profilPic
+      isOnline
+    }
+  }
+  members {
+    _id
+    username
+    email
+    profilPic
+    isOnline
+  }
+}

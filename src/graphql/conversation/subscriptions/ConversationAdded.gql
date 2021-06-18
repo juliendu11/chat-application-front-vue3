@@ -1,0 +1,7 @@
+#import "../fragments/Conversation.gql"
+
+subscription roomMessageAdded {
+    conversationAdded {
+        ...conversationField
+    }
+}

@@ -1,31 +1,11 @@
+#import "../fragments/Conversation.gql"
+
 query {
   conversations {
     result
     message
     value {
-      _id
-      last_message {
-        date
-        medias{
-          path
-          type
-        }
-        message
-        user {
-          _id
-          username
-          email
-          profilPic
-          isOnline
-        }
-      }
-      members {
-        _id
-        username
-        email
-        profilPic
-        isOnline
-      }
+      ...conversationField
     }
   }
 }

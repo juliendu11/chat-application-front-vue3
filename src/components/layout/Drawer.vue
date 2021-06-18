@@ -48,8 +48,8 @@
             :isNewMessage="pmIdsNewMessage.find(x=>x == conversation._id)"
             :from="getOtherMember(conversation.members).username"
             :profilPic="getOtherMember(conversation.members).profilPic"
-            :message="generateTextPreview(conversation.last_message.medias.length, conversation.last_message.message)"
-            :date="formatDateFromNow(conversation.last_message.date)"
+            :message="room.last_message ? generateTextPreview(conversation.last_message.medias.length, conversation.last_message.message) :''"
+            :date="room.last_message ? formatDateFromNow(conversation.last_message.date): ''"
             />
       </div>
     </div>
@@ -89,6 +89,7 @@ import RoomAddedSub from '@/graphql/rooms/subscriptions/RoomAdded.gql'
 import RoomMessageAddedSub from '@/graphql/rooms/subscriptions/RoomMessageAdded.gql'
 
 import Conversations from '@/graphql/conversation/queries/Conversations.gql'
+import ConversationAddedSub from '@/graphql/conversation/subscriptions/ConversationAdded.gql'
 import ConversationNewMessage from '@/graphql/conversation/subscriptions/NewMessage.gql'
 
 import { useMitt } from '../../plugins/mitt'
@@ -118,10 +119,10 @@ export default defineComponent({
       selectedTab.value = tab
     }
 
-    const { result: getRoomsResult, subscribeToMore } = useQuery<RoomsOutput, RoomsInput>(Rooms)
+    const { result: getRoomsResult, subscribeToMore: roomsSubscribeToMore } = useQuery<RoomsOutput, RoomsInput>(Rooms)
     const rooms = useResult(getRoomsResult, [], data => data.rooms.value)
 
-    subscribeToMore({
+    roomsSubscribeToMore({
       document: RoomAddedSub,
       updateQuery: (previousResult, { subscriptionData }: any) => {
         const _previousResult = cloneDeep(previousResult)
@@ -166,10 +167,19 @@ export default defineComponent({
       }
     })
 
-    const { result: conversationResult } = useQuery<
+    const { result: conversationResult, subscribeToMore: conversationSubscribeToMore } = useQuery<
       ConversationsOutput,
       ConversationsInput
     >(Conversations)
+
+    conversationSubscribeToMore({
+      document: ConversationAddedSub,
+      updateQuery: (previousResult, { subscriptionData }: any) => {
+        const _previousResult = cloneDeep(previousResult)
+        _previousResult.conversations.value.push(subscriptionData.data.conversationAdded)
+        return _previousResult
+      }
+    })
 
     const { result: conversationMessageAddedResult } = useSubscription<
       NewMessageOutput,
