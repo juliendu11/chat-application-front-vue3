@@ -22,35 +22,16 @@
     <div class="drawer__content">
       <div v-show="selectedTab === 0">
         <perfect-scrollbar>
-          <div
-            class="conversation-item"
+          <ConversationItem
             v-for="(room, i) in rooms"
             :key="i"
             @click="onClickOpenRoomConversation(room)"
-          >
-            <div class="conversation-item__header">
-              <span>{{ room.name }}</span>
-            </div>
-            <div class="conversation-item__content" :class="{'conversation-item__content--new-msg':roomIdsNewMessage.find(x=>x == room._id)}">
-              <span>{{
-                room.last_message ? room.last_message.user.username : room.name
-              }}</span>
-              <p>
-                {{
-                  room.last_message ? generateTextPreview(room.last_message.medias.length, room.last_message.message) : "Hello there!"
-                }}
-              </p>
-            </div>
-            <div class="conversation-item__extra">
-              <span>
-                {{
-                  room.last_message
-                    ? formatDateFromNow(room.last_message.date)
-                    : ""
-                }}</span
-              >
-            </div>
-          </div>
+            :title="room.name"
+            :isNewMessage="roomIdsNewMessage.find(x=>x == room._id)"
+            :from="room.last_message ? room.last_message.user.username : room.name"
+            :message="room.last_message ? generateTextPreview(room.last_message.medias.length, room.last_message.message) : 'Hello there!'"
+            :date="room.last_message? formatDateFromNow(room.last_message.date): ''"
+            />
         </perfect-scrollbar>
         <div class="add-room">
           <Button :rounded="true" color="primary" @click="onClickAddRoom">
@@ -60,29 +41,16 @@
         </div>
       </div>
       <div v-show="selectedTab === 1">
-        <div
-          class="conversation-item"
-          v-for="(conversation, z) in conversations"
-          :key="z"
-          @click="onClickOpenPrivateConversation(conversation)"
-        >
-          <div class="conversation-item__header" :class="{'conversation-item__header--online':isOnline(getOtherMember(conversation.members))}">
-            <UserPic
-              :username="getOtherMember(conversation.members).username"
-              :image="getOtherMember(conversation.members).profilPic"
+         <ConversationItem
+            v-for="(conversation, i) in conversations"
+            :key="i"
+            @click="onClickOpenPrivateConversation(conversation)"
+            :isNewMessage="pmIdsNewMessage.find(x=>x == conversation._id)"
+            :from="getOtherMember(conversation.members).username"
+            :profilPic="getOtherMember(conversation.members).profilPic"
+            :message="generateTextPreview(conversation.last_message.medias.length, conversation.last_message.message)"
+            :date="formatDateFromNow(conversation.last_message.date)"
             />
-            <i class="fa fa-circle" aria-hidden="true"></i>
-          </div>
-          <div class="conversation-item__content" :class="{'conversation-item__content--new-msg':pmIdsNewMessage.find(x=>x == conversation._id)}">
-            <span>{{ getOtherMember(conversation.members).username }}</span>
-            <p>
-              {{ generateTextPreview(conversation.last_message.medias.length, conversation.last_message.message) }}
-            </p>
-          </div>
-          <div class="conversation-item__extra">
-            <span>{{ formatDateFromNow(conversation.last_message.date) }}</span>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -99,6 +67,7 @@ import {
   useApolloClient
 } from '@vue/apollo-composable'
 import { cloneDeep } from '@apollo/client/utilities'
+import { useToast } from 'vue-toastification'
 
 import { Conversation, Member, Room } from '@/types/graphql/Items'
 import { RoomMessageAddedOuput } from '@/types/graphql/rooms/RoomMessageAdded'
@@ -126,12 +95,11 @@ import { useMitt } from '../../plugins/mitt'
 import DialogContainerNames from '../../enums/DialogContainerNames'
 import { useStore } from '../../store/Store'
 
-import UserPic from '@/components/UserPic.vue'
-import { useToast } from 'vue-toastification'
+import ConversationItem from '@/components/ConversationItem.vue'
 
 export default defineComponent({
   name: 'Drawer',
-  components: { UserPic },
+  components: { ConversationItem },
   setup () {
     const router = useRouter()
     const mitt = useMitt()
