@@ -1,0 +1,7 @@
+
+mutation pushNotificationSubscribe($pushNotificationSubscribeInput: PushNotificationSubscribeInput!) {
+  pushNotificationSubscribe(pushNotificationSubscribeInput: $pushNotificationSubscribeInput) {
+    message
+    result
+  }
+}

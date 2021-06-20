@@ -23,7 +23,7 @@ $ npm run build
 
 - [X] Login/Register/Forgot Password/Reset Password
 - [X] Send mail for confirm account and password management
-- [/] Refresh token (with 2 week validity)
+- [X] Refresh token (with 2 week validity)
 - [X] Room management (create, send message)
 - [X] Conversation management (view conv, send message, subscription when new message)
 - [X] Sending images
@@ -33,7 +33,7 @@ $ npm run build
 - [X] Contacts management (online, offline list with subscription)
 - [X] Update profil image
 - [ ] Option for sub message room
-- [ ] Push notification PWA
+- [X] Push notification PWA
 
 - [ ] Unit tests
 - [ ] Integrations tests

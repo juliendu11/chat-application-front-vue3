@@ -11,8 +11,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, watch } from 'vue'
+import { defineComponent, onMounted, watch } from 'vue'
 import {
+  useMutation,
   useQuery,
   useSubscription
 } from '@vue/apollo-composable'
@@ -20,6 +21,9 @@ import {
 import MyInformation from '@/graphql/member/queries/MyInformation.gql'
 import MemberOnline from '@/graphql/member/subscriptions/MemberOnline.gql'
 import MemberOffline from '@/graphql/member/subscriptions/MemberOffline.gql'
+
+import PushNotificationPublicKey from '@/graphql/web-push/queries/PushNotificationPublicKey.gql'
+import PushNotificationSubscribe from '@/graphql/web-push/mutations/PushNotificationSubscribe.gql'
 
 import {
   MemberOnlineInput,
@@ -35,6 +39,9 @@ import {
   MemberMyInfoOutput
 } from '@/types/graphql/member/MemberMyInfo'
 
+import { PushNotificationPublicKeyOutput } from '@/types/graphql/web-push/PushNotificationPublicKey'
+import { PushNotificationSubscribeInput, PushNotificationSubscribeOutput } from '@/types/graphql/web-push/PushNotificationSubscribe'
+
 import Drawer from '@/components/layout/Drawer.vue'
 import RightDrawer from '@/components/layout/RightDrawer.vue'
 import Header from '@/components/layout/Header.vue'
@@ -42,6 +49,9 @@ import DialogWrapper from '@/components/DialogWrapper.vue'
 import { useStore } from '../store/Store'
 
 import { useMitt } from '@/plugins/mitt'
+
+import { urlBase64ToUint8Array } from '@/helpers/unit-convert'
+import { showErrorSwal } from '@/services/swal.service'
 
 export default defineComponent({
   name: 'Home',
@@ -54,6 +64,8 @@ export default defineComponent({
   setup () {
     const store = useStore()
     const mitt = useMitt()
+
+    const { onResult: onResultPushNotificationPck } = useQuery<PushNotificationPublicKeyOutput>(PushNotificationPublicKey)
 
     const { onResult } = useQuery<MemberMyInfoOutput, MemberMyInfoInput>(
       MyInformation
@@ -91,6 +103,62 @@ export default defineComponent({
         isOnline: false
       })
     })
+
+    const { mutate } = useMutation<PushNotificationSubscribeOutput, PushNotificationSubscribeInput>(PushNotificationSubscribe)
+
+    onResultPushNotificationPck(async (result) => {
+      if (!result.data) return
+      if (result.data.pushNotificationPublicKey.result) {
+        await subscribeWebPush(result.data.pushNotificationPublicKey.value)
+      }
+    })
+
+    const subscribeWebPush = async (publicKey:string) => {
+      if (!('Notification' in window) || !('serviceWorker' in navigator)) {
+        return
+      }
+      if (Notification.permission !== 'granted') {
+        const permission = await Notification.requestPermission()
+        if (permission === 'granted') {
+          const registration = await navigator.serviceWorker.ready
+          let subscription = await registration.pushManager.getSubscription()
+          if (subscription) {
+            return
+          }
+          subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(publicKey)
+          })
+
+          const _sub = subscription.toJSON()
+          if (!_sub || !_sub.keys || !_sub.endpoint) return
+
+          await saveSubscription(_sub.keys.auth, _sub.keys.p256dh, _sub.endpoint)
+        }
+      }
+    }
+
+    const saveSubscription = async (auth:string, p256dh:string, endpoint:string) => {
+      try {
+        const { data } = await mutate({
+          pushNotificationSubscribeInput: {
+            auth,
+            p256dh,
+            endpoint
+          }
+        })
+
+        if (!data) {
+          throw new Error('Unable to get data for save subscription')
+        }
+
+        if (!data.pushNotificationSubscribe.result) {
+          throw new Error(data.pushNotificationSubscribe.message)
+        }
+      } catch (error) {
+        showErrorSwal(`Unable to save push notification subscription, you cannot receive push notification, error message: ${error.message}`)
+      }
+    }
   }
 })
 </script>
