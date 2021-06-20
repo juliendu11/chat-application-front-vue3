@@ -13,11 +13,23 @@ $ npm run serve
 
 ## Production
 
-Run this command to launch in production mode:
+Before build modify the link in the src/service-worker.js file by the link of your site
+
+```javascript
+if (windowClient.url.includes('https://MyWebSite.com/') && windowClient.visibilityState === 'visible') {
+    clientIsVisible = true
+    break
+}
+```
+
+
+Run this command to build project:
 
 ```bash
 $ npm run build
 ```
+
+<b> :warning: Push notifications only work for production mode! Build the project and serve the files in dist</b>
 
 ## Features
 
@@ -33,7 +45,7 @@ $ npm run build
 - [X] Contacts management (online, offline list with subscription)
 - [X] Update profil image
 - [ ] Option for sub message room
-- [X] Push notification PWA
+- [X] Push notification PWA (for private message only if app is closed or if app not focused)
 
 - [ ] Unit tests
 - [ ] Integrations tests
