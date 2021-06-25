@@ -7,6 +7,7 @@
 import {
   computed,
   defineComponent,
+  nextTick,
   onMounted,
   ref
 } from 'vue'
@@ -32,7 +33,8 @@ import Tchat from '@/components/Tchat.vue'
 
 import { useMitt } from '../plugins/mitt'
 
-import { mediaBusinessLogic, scrolling, formBusinessLogic, messageBusinessLogic } from './tchat'
+import { mediaBusinessLogic, formBusinessLogic, messageBusinessLogic } from './tchat'
+import { debounce } from 'ts-debounce'
 
 export default defineComponent({
   name: 'PrivateMessage',
@@ -86,8 +88,6 @@ export default defineComponent({
       autoScrollToBottomUp()
     }
 
-    const { autoScrollToBottomUp, onScrollUp, autoScrollToBottom } = scrolling(loadMore)
-
     onMounted(() => {
       mitt.conversationMessageAdded.listen((messageAdded) => {
         message.values.unshift(messageAdded)
@@ -104,13 +104,18 @@ export default defineComponent({
 
     onResult(({ data }) => {
       if (data && data.conversationMessages.result) {
+        const useAutoScroll = message.values.length === 0
+
         message.pageAvailable = data.conversationMessages.value.pageAvailable
         message.moreAvailable = data.conversationMessages.value.moreAvailable
         message.values = [
           ...message.values,
           ...data.conversationMessages.value.messages
         ]
-        autoScrollToBottom()
+
+        if (useAutoScroll) {
+          autoScrollToBottom()
+        }
       }
     })
 
@@ -157,6 +162,33 @@ export default defineComponent({
     const onMessageChanged = (value:string) => {
       form.message = value
     }
+
+    const autoScrollToBottomUp = () => {
+      const scrollBar = document.querySelector('#scrollBar')
+      if (scrollBar) {
+        scrollBar.scroll({
+          top: 800,
+          left: 0,
+          behavior: 'smooth'
+        })
+      }
+    }
+
+    const autoScrollToBottom = () => {
+      nextTick(() => {
+        const scrollBar = document.querySelector('#scrollBar')
+        if (scrollBar) {
+          scrollBar.scrollTop = scrollBar.scrollHeight
+        }
+      })
+    }
+
+    const onScrollUp = () => {
+      if (!message.moreAvailable) return
+      debounceInfiniteHandler()
+    }
+
+    const debounceInfiniteHandler = debounce(() => loadMore(), 500)
 
     return {
       onSubmitForm,

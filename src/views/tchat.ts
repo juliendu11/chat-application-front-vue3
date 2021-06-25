@@ -1,6 +1,5 @@
 import { MediaSelected } from '@/types/MediaSelected'
-import { nextTick, reactive, Ref, ref } from 'vue'
-import { debounce } from 'ts-debounce'
+import { reactive, Ref, ref } from 'vue'
 import { MessageReactive } from '@/types/reactive/Room'
 import { onBeforeRouteUpdate } from 'vue-router'
 import { FormReactive } from '@/types/reactive/PrivateMessage'
@@ -37,41 +36,6 @@ const mediaBusinessLogic = () => {
     onAddFiles,
     onDeleteFileSelected,
     mediasSelected
-  }
-}
-
-const scrolling = (loadMoreFunc:any) => {
-  const autoScrollToBottomUp = () => {
-    const scrollBar = document.querySelector('#scrollBar')
-    if (scrollBar) {
-      scrollBar.scroll({
-        top: 95 * 4,
-        left: 0,
-        behavior: 'smooth'
-      })
-    }
-  }
-
-  const autoScrollToBottom = () => {
-    nextTick(() => {
-      const scrollBar = document.querySelector('#scrollBar')
-      if (scrollBar) {
-        scrollBar.scrollTop = scrollBar.scrollHeight
-      }
-    })
-  }
-
-  const onScrollUp = (moreAvailable:boolean) => {
-    if (!moreAvailable) return
-    debounceInfiniteHandler()
-  }
-
-  const debounceInfiniteHandler = debounce(() => loadMoreFunc(), 500)
-
-  return {
-    autoScrollToBottomUp,
-    onScrollUp,
-    autoScrollToBottom
   }
 }
 
@@ -124,7 +88,6 @@ const messageBusinessLogic = () => {
 
 export {
   mediaBusinessLogic,
-  scrolling,
   formBusinessLogic,
   messageBusinessLogic
 }
