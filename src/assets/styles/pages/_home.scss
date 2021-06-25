@@ -26,8 +26,17 @@
         display: flex;
         flex-direction: column;
 
-        &__content{
+        &__content {
             display: none;
         }
+    }
+}
+
+.home.close-drawer {
+    .home__drawer{
+        display: none;
+    }
+    .home__content {
+        display: block;
     }
 }

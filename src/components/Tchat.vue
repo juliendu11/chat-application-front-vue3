@@ -1,6 +1,9 @@
 <template>
   <div class="tchat">
     <div class="tchat__header">
+       <Button :isIcon="true" type="btn-clean" color="primary" @click="onClickReturn">
+         <i class="fa fa-chevron-left" aria-hidden="true"></i>
+       </Button>
       <h3>{{ header }}</h3>
     </div>
     <perfect-scrollbar id="scrollBar" :class="{'ps--grow':mediasSelected.length !== 0}" @ps-y-reach-start="onScrollUp">
@@ -49,6 +52,7 @@ import { computed, defineComponent, PropType } from 'vue'
 import MessageItem from '@/components/MessageItem.vue'
 import FileSelected from '@/components/FileSelected.vue'
 import { MediaSelected } from '@/types/MediaSelected'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'Tchat',
@@ -83,6 +87,8 @@ export default defineComponent({
   },
   emits: ['submit', 'scoll-up', 'update:message', 'on-delete-file', 'on-add-files'],
   setup (props, { emit }) {
+    const router = useRouter()
+
     const formMessage = computed({
       get: () => props.message,
       set: (val) => {
@@ -117,6 +123,10 @@ export default defineComponent({
       }
     }
 
+    const onClickReturn = () => {
+      router.push('/')
+    }
+
     return {
       onScrollUp,
       onSubmitForm,
@@ -124,7 +134,8 @@ export default defineComponent({
       onDeleteFileSelected,
       onClickUploadFile,
       formMessage,
-      isMe
+      isMe,
+      onClickReturn
     }
   }
 })

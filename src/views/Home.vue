@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" :class="{'close-drawer': drawerClosed}">
     <DialogWrapper />
     <Header class="home__header" />
     <Drawer class="home__drawer" />
@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, watch } from 'vue'
+import { computed, defineComponent, onMounted, watch } from 'vue'
 import {
   useMutation,
   useQuery,
@@ -52,6 +52,7 @@ import { useMitt } from '@/plugins/mitt'
 
 import { urlBase64ToUint8Array } from '@/helpers/unit-convert'
 import { showErrorSwal } from '@/services/swal.service'
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
   name: 'Home',
@@ -64,6 +65,7 @@ export default defineComponent({
   setup () {
     const store = useStore()
     const mitt = useMitt()
+    const route = useRoute()
 
     const { onResult: onResultPushNotificationPck } = useQuery<PushNotificationPublicKeyOutput>(PushNotificationPublicKey)
 
@@ -158,6 +160,16 @@ export default defineComponent({
       } catch (error) {
         showErrorSwal(`Unable to save push notification subscription, you cannot receive push notification, error message: ${error.message}`)
       }
+    }
+
+    const drawerClosed = computed(() => {
+      if (window.innerWidth <= 768 && route.path !== '/') return true
+
+      return false
+    })
+
+    return {
+      drawerClosed
     }
   }
 })

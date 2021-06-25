@@ -7,7 +7,13 @@
         padding: 1.5rem 2rem;
         border-bottom: solid 1px;
         @include theme-aware('border-color', 'color-gray2');
+
+        button {
+            display: none;
+        }
     }
+
+    
 
     .ps {
         height: calc(100vh - 270px);
@@ -23,6 +29,33 @@
         display: flex;
         flex-direction: column;
         gap: 2rem;
+    }
+
+    @media screen and (max-width: map-get($breakpoints, 'medium')) {
+        &__header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+
+            padding-right: 1rem;
+            padding-left: 1rem;
+            padding-top: 1.2rem;
+            padding-bottom: 1.2rem;
+
+            button {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+
+                i {
+                    padding-right: 2px;
+                }
+            }
+        }
+        &__content {
+            padding: 0.5rem;
+        }
     }
 
     &__footer {

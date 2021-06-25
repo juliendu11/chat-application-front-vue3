@@ -11,6 +11,7 @@
     &__logo {}
 
     @media screen and (max-width: map-get($breakpoints, 'medium')) {
+        padding: 0 0.2rem;
         &__logo {
             display: none!important;
         }
