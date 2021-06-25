@@ -9,7 +9,7 @@
         </template>
       </div>
       <p v-if="message.message">
-        {{message.message}}
+        <template v-for="(line, i) in message.message.split('\n')" :key="i">{{line}}<br></template>
       </p>
       <span>{{formatDateFromNow(message.date)}}</span>
     </div>
