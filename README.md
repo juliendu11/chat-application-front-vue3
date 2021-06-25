@@ -4,16 +4,18 @@ Frontent with Vue JS 3 with vue-cli + Typescript for a real-time chat applicatio
 
 <a href="https://github.com/juliendu11/chat-application-back-nestjs">Go to Backend part</a>
 
+Strongly inspired by https://dribbble.com/shots/13946594-Omni-channel-Conversation/attachments/5558081?mode=media
+
 ## Preview
 
-<img src="public/img/app/1.png" alt="drawing" width="500"/>
-<img src="public/img/app/2.png" alt="drawing" width="500"/>
-<img src="public/img/app/3.png" alt="drawing" width="500"/>
-<img src="public/img/app/4.png" alt="drawing" width="500"/>
-<img src="public/img/app/5.png" alt="drawing" width="500"/>
-<img src="public/img/app/6.png" alt="drawing" width="500"/>
-<img src="public/img/app/7.png" alt="drawing" width="500"/>
-<img src="public/img/app/8.png" alt="drawing" width="500"/>
+<img src="public/img/app/1.png" alt="drawing" />
+<img src="public/img/app/2.png" alt="drawing" />
+<img src="public/img/app/3.png" alt="drawing" />
+<img src="public/img/app/4.png" alt="drawing" />
+<img src="public/img/app/5.png" alt="drawing" />
+<img src="public/img/app/6.png" alt="drawing" />
+<img src="public/img/app/7.png" alt="drawing" />
+<img src="public/img/app/8.png" alt="drawing" />
 
 
 ## Installing
