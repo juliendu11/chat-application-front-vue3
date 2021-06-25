@@ -3,6 +3,19 @@
 Frontent with Vue JS 3 with vue-cli + Typescript for a real-time chat application. The application aims to add a "big" real projects for my portfolio.
 
 <a href="https://github.com/juliendu11/chat-application-back-nestjs">Go to Backend part</a>
+
+## Preview
+
+<img src="public/img/app/1.png" alt="drawing" width="500"/>
+<img src="public/img/app/2.png" alt="drawing" width="500"/>
+<img src="public/img/app/3.png" alt="drawing" width="500"/>
+<img src="public/img/app/4.png" alt="drawing" width="500"/>
+<img src="public/img/app/5.png" alt="drawing" width="500"/>
+<img src="public/img/app/6.png" alt="drawing" width="500"/>
+<img src="public/img/app/7.png" alt="drawing" width="500"/>
+<img src="public/img/app/8.png" alt="drawing" width="500"/>
+
+
 ## Installing
 
 Launch the frontend then run this command:
@@ -45,6 +58,7 @@ $ npm run build
 - [X] Contacts management (online, offline list with subscription)
 - [X] Update profil image
 - [ ] Option for sub message room
+- [ ] Video reader
 - [X] Push notification PWA (for private message only if app is closed or if app not focused)
 
 - [ ] Unit tests
