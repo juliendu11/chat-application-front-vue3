@@ -164,6 +164,8 @@ export default defineComponent({
       }
     }
 
+    windowWidth.value = window.innerWidth
+
     window.addEventListener('resize', () => {
       windowWidth.value = window.innerWidth
     })

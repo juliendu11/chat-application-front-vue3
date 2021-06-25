@@ -50,6 +50,11 @@
             margin-top: 0.5rem;
             font-size: 14px;
             @include theme-aware('color', 'color-gray4');
+
+            max-width: 16em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         &--new-msg p{
