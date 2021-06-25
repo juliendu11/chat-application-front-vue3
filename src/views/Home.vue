@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, watch } from 'vue'
+import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import {
   useMutation,
   useQuery,
@@ -66,6 +66,8 @@ export default defineComponent({
     const store = useStore()
     const mitt = useMitt()
     const route = useRoute()
+
+    const windowWidth = ref(0)
 
     const { onResult: onResultPushNotificationPck } = useQuery<PushNotificationPublicKeyOutput>(PushNotificationPublicKey)
 
@@ -162,10 +164,12 @@ export default defineComponent({
       }
     }
 
-    const drawerClosed = computed(() => {
-      if (window.innerWidth <= 768 && route.path !== '/') return true
+    window.addEventListener('resize', () => {
+      windowWidth.value = window.innerWidth
+    })
 
-      return false
+    const drawerClosed = computed(() => {
+      return windowWidth.value <= 768 && route.path !== '/'
     })
 
     return {

@@ -1,5 +1,10 @@
 <template>
   <div class="contact-page">
+    <div class="contact-page__header">
+       <Button :isIcon="true" type="btn-clean" color="primary" @click="onClickReturn">
+         <i class="fa fa-chevron-left" aria-hidden="true"></i>
+       </Button>
+    </div>
     <perfect-scrollbar>
       <div class="contact-page__container">
         <div>
@@ -37,6 +42,7 @@ import { MembersInfoInput, MembersInfoOuput } from '@/types/graphql/member/Membe
 import { useStore } from '../store/Store'
 import { useMitt } from '@/plugins/mitt'
 import { cloneDeep } from '@apollo/client/utilities'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'Contact',
@@ -46,6 +52,7 @@ export default defineComponent({
     const mitt = useMitt()
     const { resolveClient } = useApolloClient()
     const client = resolveClient()
+    const router = useRouter()
 
     const { result } = useQuery<MembersInfoOuput, MembersInfoInput>(MembersInfo)
 
@@ -98,9 +105,14 @@ export default defineComponent({
       subscribe()
     })
 
+    const onClickReturn = () => {
+      router.push('/')
+    }
+
     return {
       onlineUsers,
-      offlineUsers
+      offlineUsers,
+      onClickReturn
     }
   }
 })
