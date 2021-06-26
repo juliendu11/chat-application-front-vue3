@@ -2,17 +2,17 @@
   <div class="conversation-item">
     <div class="conversation-item__header">
       <span v-if="title">{{ title }}</span>
-      <UserPic v-else :username="from" :image="profilPic"/>
+      <UserPic v-else :username="from" :image="profilPic" />
     </div>
     <div
       class="conversation-item__content"
-      :class="{'conversation-item__content--new-msg':isNewMessage}"
+      :class="{ 'conversation-item__content--new-msg': isNewMessage }"
     >
-      <span>{{from}}</span>
-      <p>{{message}}</p>
+      <span>{{ from }}</span>
+      <p>{{ message }}</p>
     </div>
     <div class="conversation-item__extra">
-      <span>{{date}}</span>
+      <span>{{ date }}</span>
     </div>
   </div>
 </template>

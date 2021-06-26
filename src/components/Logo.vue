@@ -1,8 +1,10 @@
 <template>
+ <router-link to="/">
 <div class="logo">
         <img src="/logo.png" alt="Chat application logo">
         <h3>Studio</h3>
       </div>
+ </router-link>
 </template>
 
 <script lang="ts">

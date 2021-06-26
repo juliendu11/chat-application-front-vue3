@@ -22,16 +22,33 @@
     <div class="drawer__content">
       <div v-show="selectedTab === 0">
         <perfect-scrollbar>
-          <ConversationItem
+          <router-link
             v-for="(room, i) in rooms"
             :key="i"
-            @click="onClickOpenRoomConversation(room)"
-            :title="room.name"
-            :isNewMessage="roomIdsNewMessage.some(x=>x == room._id)"
-            :from="room.last_message ? room.last_message.user.username : room.name"
-            :message="room.last_message ? generateTextPreview(room.last_message.medias.length, room.last_message.message) : 'Hello there!'"
-            :date="room.last_message? formatDateFromNow(room.last_message.date): ''"
+            :to="'/rooms/' + room.name"
+          >
+            <ConversationItem
+              @click.prevent="onClickOpenRoomConversation(room)"
+              :title="room.name"
+              :isNewMessage="roomIdsNewMessage.some((x) => x == room._id)"
+              :from="
+                room.last_message ? room.last_message.user.username : room.name
+              "
+              :message="
+                room.last_message
+                  ? generateTextPreview(
+                      room.last_message.medias.length,
+                      room.last_message.message
+                    )
+                  : 'Hello there!'
+              "
+              :date="
+                room.last_message
+                  ? formatDateFromNow(room.last_message.date)
+                  : ''
+              "
             />
+          </router-link>
         </perfect-scrollbar>
         <div class="add-room">
           <Button :rounded="true" color="primary" @click="onClickAddRoom">
@@ -41,16 +58,31 @@
         </div>
       </div>
       <div v-show="selectedTab === 1">
-         <ConversationItem
-            v-for="(conversation, i) in conversations"
-            :key="i"
-            @click="onClickOpenPrivateConversation(conversation)"
-            :isNewMessage="pmIdsNewMessage.some(x=>x == conversation._id)"
+        <router-link
+          v-for="(conversation, i) in conversations"
+          :key="i"
+          :to="'/messages/' + getOtherMember(conversation.members).username"
+        >
+          <ConversationItem
+            @click.prevent="onClickOpenPrivateConversation(conversation)"
+            :isNewMessage="pmIdsNewMessage.some((x) => x == conversation._id)"
             :from="getOtherMember(conversation.members).username"
             :profilPic="getOtherMember(conversation.members).profilPic"
-            :message="conversation.last_message ? generateTextPreview(conversation.last_message.medias.length, conversation.last_message.message) :''"
-            :date="conversation.last_message ? formatDateFromNow(conversation.last_message.date): ''"
-            />
+            :message="
+              conversation.last_message
+                ? generateTextPreview(
+                    conversation.last_message.medias.length,
+                    conversation.last_message.message
+                  )
+                : ''
+            "
+            :date="
+              conversation.last_message
+                ? formatDateFromNow(conversation.last_message.date)
+                : ''
+            "
+          />
+        </router-link>
       </div>
     </div>
   </div>
@@ -79,10 +111,7 @@ import {
   NewMessageInput,
   NewMessageOutput
 } from '@/types/graphql/conversation/NewMessage'
-import {
-  RoomsInput,
-  RoomsOutput
-} from '@/types/graphql/rooms/Rooms'
+import { RoomsInput, RoomsOutput } from '@/types/graphql/rooms/Rooms'
 
 import Rooms from '@/graphql/rooms/queries/Rooms.gql'
 import RoomAddedSub from '@/graphql/rooms/subscriptions/RoomAdded.gql'
@@ -119,8 +148,9 @@ export default defineComponent({
       selectedTab.value = tab
     }
 
-    const { result: getRoomsResult, subscribeToMore: roomsSubscribeToMore } = useQuery<RoomsOutput, RoomsInput>(Rooms)
-    const rooms = useResult(getRoomsResult, [], data => data.rooms.value)
+    const { result: getRoomsResult, subscribeToMore: roomsSubscribeToMore } =
+      useQuery<RoomsOutput, RoomsInput>(Rooms)
+    const rooms = useResult(getRoomsResult, [], (data) => data.rooms.value)
 
     roomsSubscribeToMore({
       document: RoomAddedSub,
@@ -131,13 +161,14 @@ export default defineComponent({
       }
     })
 
-    const {
-      result: roomMessageAddedResult
-    } = useSubscription<RoomMessageAddedOuput>(RoomMessageAddedSub)
+    const { result: roomMessageAddedResult } =
+      useSubscription<RoomMessageAddedOuput>(RoomMessageAddedSub)
 
     watch(roomMessageAddedResult, (val) => {
       if (val.roomMessageAdded) {
-        const data = client.readQuery<RoomsOutput, RoomsInput>({ query: Rooms })
+        const data = client.readQuery<RoomsOutput, RoomsInput>({
+          query: Rooms
+        })
         if (!data) return
 
         const roomsCopy = cloneDeep(data.rooms.value)
@@ -167,16 +198,18 @@ export default defineComponent({
       }
     })
 
-    const { result: conversationResult, subscribeToMore: conversationSubscribeToMore } = useQuery<
-      ConversationsOutput,
-      ConversationsInput
-    >(Conversations)
+    const {
+      result: conversationResult,
+      subscribeToMore: conversationSubscribeToMore
+    } = useQuery<ConversationsOutput, ConversationsInput>(Conversations)
 
     conversationSubscribeToMore({
       document: ConversationAddedSub,
       updateQuery: (previousResult, { subscriptionData }: any) => {
         const _previousResult = cloneDeep(previousResult)
-        _previousResult.conversations.value.push(subscriptionData.data.conversationAdded)
+        _previousResult.conversations.value.push(
+          subscriptionData.data.conversationAdded
+        )
         return _previousResult
       }
     })
@@ -202,7 +235,9 @@ export default defineComponent({
           val.conversationNewMessage.last_message
       }
 
-      if (store.conversation.getIdSelected() !== val.conversationNewMessage._id) {
+      if (
+        store.conversation.getIdSelected() !== val.conversationNewMessage._id
+      ) {
         pmIdsNewMessage.value.push(val.conversationNewMessage._id)
       }
 
@@ -211,14 +246,26 @@ export default defineComponent({
       )
 
       // If is not me
-      if (val.conversationNewMessage.last_message.user._id !== store.member.getId()) {
+      if (
+        val.conversationNewMessage.last_message.user._id !==
+        store.member.getId()
+      ) {
         let message = `${val.conversationNewMessage.last_message.user.username}: `
 
-        if (val.conversationNewMessage.last_message.message && val.conversationNewMessage.last_message.medias.length !== 0) {
+        if (
+          val.conversationNewMessage.last_message.message &&
+          val.conversationNewMessage.last_message.medias.length !== 0
+        ) {
           message += `${val.conversationNewMessage.last_message.message} +${val.conversationNewMessage.last_message.medias.length} medias`
-        } else if (!val.conversationNewMessage.last_message.message && val.conversationNewMessage.last_message.medias.length !== 0) {
+        } else if (
+          !val.conversationNewMessage.last_message.message &&
+          val.conversationNewMessage.last_message.medias.length !== 0
+        ) {
           message += `${val.conversationNewMessage.last_message.medias.length} medias`
-        } else if (val.conversationNewMessage.last_message.message && val.conversationNewMessage.last_message.medias.length === 0) {
+        } else if (
+          val.conversationNewMessage.last_message.message &&
+          val.conversationNewMessage.last_message.medias.length === 0
+        ) {
           message += `${val.conversationNewMessage.last_message.message}`
         }
 
@@ -236,13 +283,19 @@ export default defineComponent({
       })
     })
 
-    const conversations = useResult(conversationResult, [], data => data.conversations.value)
+    const conversations = useResult(
+      conversationResult,
+      [],
+      (data) => data.conversations.value
+    )
 
     const onClickOpenRoomConversation = (room: Room) => {
       store.room.updateIdSelected(room._id)
       store.room.updateNameSelected(room.name)
 
-      roomIdsNewMessage.value = roomIdsNewMessage.value.filter(x => x !== room._id)
+      roomIdsNewMessage.value = roomIdsNewMessage.value.filter(
+        (x) => x !== room._id
+      )
 
       router.push('/rooms/' + room.name)
     }
@@ -254,7 +307,9 @@ export default defineComponent({
       store.conversation.updateMemberIdSelected(member._id)
       store.conversation.updateUsernameSelected(member.username)
 
-      pmIdsNewMessage.value = pmIdsNewMessage.value.filter(x => x !== conversation._id)
+      pmIdsNewMessage.value = pmIdsNewMessage.value.filter(
+        (x) => x !== conversation._id
+      )
 
       router.push('/messages/' + member.username)
     }
@@ -272,11 +327,11 @@ export default defineComponent({
       return members.filter((x) => x._id !== store.member.getId())[0]
     }
 
-    const isOnline = (member:Member) => {
+    const isOnline = (member: Member) => {
       return member.isOnline
     }
 
-    const generateTextPreview = (numberOfMedias:number, text:string) => {
+    const generateTextPreview = (numberOfMedias: number, text: string) => {
       if (numberOfMedias === 0) {
         return text
       }

@@ -82,9 +82,7 @@ export default defineComponent({
       })
     })
 
-    const { onResult, refetch } = useQuery<RoomGetMessageOutput, RoomGetMessageInput>(RoomMessages, getFetchInformation(), {
-      fetchPolicy: 'cache-and-network'
-    })
+    const { onResult, refetch } = useQuery<RoomGetMessageOutput, RoomGetMessageInput>(RoomMessages, getFetchInformation())
 
     onResult(({ data }) => {
       if (data.roomMessage.result) {

@@ -98,9 +98,7 @@ export default defineComponent({
     const { onResult, refetch } = useQuery<
       ConversationMessageOutput,
       ConversationMessageInput
-    >(ConversationMessage, getFetchInformation(), {
-      fetchPolicy: 'cache-and-network'
-    })
+    >(ConversationMessage, getFetchInformation())
 
     onResult(({ data }) => {
       if (data && data.conversationMessages.result) {
