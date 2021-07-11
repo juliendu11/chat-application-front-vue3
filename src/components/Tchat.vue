@@ -50,7 +50,7 @@ import MessageItemType from '@/types/MessageItem'
 import { computed, defineComponent, PropType } from 'vue'
 
 import MessageItem from '@/components/MessageItem.vue'
-import FileSelected from '@/components/FileSelected.vue'
+import FileSelected from '@/components/BaseFileSelected.vue'
 import { MediaSelected } from '@/types/MediaSelected'
 import { useRouter } from 'vue-router'
 

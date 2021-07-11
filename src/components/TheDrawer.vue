@@ -121,9 +121,9 @@ import Conversations from '@/graphql/conversation/queries/Conversations.gql'
 import ConversationAddedSub from '@/graphql/conversation/subscriptions/ConversationAdded.gql'
 import ConversationNewMessage from '@/graphql/conversation/subscriptions/NewMessage.gql'
 
-import { useMitt } from '../../plugins/mitt'
-import DialogContainerNames from '../../enums/DialogContainerNames'
-import { useStore } from '../../store/Store'
+import { useMitt } from '../plugins/mitt'
+import DialogContainerNames from '../enums/DialogContainerNames'
+import { useStore } from '../store/Store'
 
 import ConversationItem from '@/components/ConversationItem.vue'
 

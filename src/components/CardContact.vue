@@ -28,7 +28,7 @@ import { useRouter } from 'vue-router'
 import { useApolloClient } from '@vue/apollo-composable'
 
 import UserPic from '@/components/UserPic.vue'
-import { Member } from '../../types/graphql/Items'
+import { Member } from '../types/graphql/Items'
 import { useStore } from '@/store/Store'
 import { ConversationsInput, ConversationsOutput } from '@/types/graphql/conversation/Conversations'
 

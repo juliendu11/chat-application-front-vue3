@@ -11,7 +11,7 @@
 import { defineComponent, reactive } from 'vue'
 import { useMitt } from '../plugins/mitt'
 
-import AddRoomDialog from '@/components/dialogs/AddRoomDialog.vue'
+import AddRoomDialog from '@/components/DialogAddRoom.vue'
 
 import DialogWrapperState from '@/types/DialogWrapperState'
 

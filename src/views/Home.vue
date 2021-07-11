@@ -42,9 +42,9 @@ import {
 import { PushNotificationPublicKeyOutput } from '@/types/graphql/web-push/PushNotificationPublicKey'
 import { PushNotificationSubscribeInput, PushNotificationSubscribeOutput } from '@/types/graphql/web-push/PushNotificationSubscribe'
 
-import Drawer from '@/components/layout/Drawer.vue'
-import RightDrawer from '@/components/layout/RightDrawer.vue'
-import Header from '@/components/layout/Header.vue'
+import Drawer from '@/components/TheDrawer.vue'
+import RightDrawer from '@/components/TheRightDrawer.vue'
+import Header from '@/components/TheHeader.vue'
 import DialogWrapper from '@/components/DialogWrapper.vue'
 import { useStore } from '../store/Store'
 

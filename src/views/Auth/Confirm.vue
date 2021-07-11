@@ -26,7 +26,7 @@ import {
 } from '@/types/graphql/member/ConfirmAccount'
 import { useMutation } from '@vue/apollo-composable'
 
-import Spinner from '@/components/base/Spinner.vue'
+import Spinner from '@/components/BaseSpinner.vue'
 
 export default defineComponent({
   name: 'Confirm',

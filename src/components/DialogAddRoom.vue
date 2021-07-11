@@ -24,7 +24,7 @@ import { useMutation } from '@vue/apollo-composable'
 import CreateRoom from '@/graphql/rooms/mutations/CreateRoom.gql'
 
 import { RoomCreateInput, RoomCreateOutput } from '@/types/graphql/rooms/CreateRoom'
-import { showErrorSwal, showSuccessSwal } from '../../services/swal.service'
+import { showErrorSwal, showSuccessSwal } from '../services/swal.service'
 
 export default defineComponent({
   name: 'AddRoomDialog',

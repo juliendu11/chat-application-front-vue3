@@ -21,13 +21,13 @@ import { defineComponent, ref } from 'vue'
 import { useMutation } from '@vue/apollo-composable'
 
 import UserPic from '@/components/UserPic.vue'
-import { useMitt } from '../../plugins/mitt'
+import { useMitt } from '../plugins/mitt'
 import { getProfilInformation } from '@/common/profil'
 
 import MemberUpdateProfilPic from '@/graphql/member/mutations/MemberUpdateProfilPic.gql'
 import { MemberUpdateProfilPicInput, MemberUpdateProfilPicOutput } from '@/types/graphql/member/MemberUpdateProfilPic'
-import { showErrorSwal, showSuccessSwal } from '../../services/swal.service'
-import { deleteToken } from '../../services/token.service'
+import { showErrorSwal, showSuccessSwal } from '../services/swal.service'
+import { deleteToken } from '../services/token.service'
 
 export default defineComponent({
   name: 'RightDrawer',

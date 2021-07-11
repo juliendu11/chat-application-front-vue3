@@ -21,7 +21,7 @@ import { defineComponent } from 'vue'
 
 import Logo from '@/components/Logo.vue'
 import UserPic from '@/components/UserPic.vue'
-import { useMitt } from '../../plugins/mitt'
+import { useMitt } from '../plugins/mitt'
 import { getProfilInformation } from '@/common/profil'
 
 export default defineComponent({

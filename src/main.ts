@@ -11,9 +11,9 @@ import './assets/styles/main.scss'
 import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css'
 import 'vue-toastification/dist/index.css'
 
-import FormGroup from '@/components/base/FormGroup.vue'
-import Button from '@/components/base/Button.vue'
-import Switch from '@/components/base/Switch.vue'
+import FormGroup from '@/components/BaseFormGroup.vue'
+import Button from '@/components/BaseButton.vue'
+import Switch from '@/components/BaseSwitch.vue'
 
 import ApolloPlugin from '@/plugins/apollo'
 import MittPlugin from '@/plugins/mitt'

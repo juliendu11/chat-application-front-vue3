@@ -35,7 +35,7 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import { useQuery, useResult, useApolloClient } from '@vue/apollo-composable'
-import ContactCard from '@/components/cards/ContactCard.vue'
+import ContactCard from '@/components/CardContact.vue'
 
 import MembersInfo from '@/graphql/member/queries/MembersInfo.gql'
 import { MembersInfoInput, MembersInfoOuput } from '@/types/graphql/member/MembersInfo'
